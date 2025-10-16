@@ -1,5 +1,5 @@
 import React from "react";
-import ChatWindow from "./chatWindow";
+import ChatWindow from "./chatBot/chatWindow";
 
 type DashboardProps = {
     to?: string;
