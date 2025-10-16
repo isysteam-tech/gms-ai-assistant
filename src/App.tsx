@@ -2,14 +2,15 @@
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
+import Dashboard from "./components/dashboard";
 
-function App() {
+const App: React.FC = () => {
   // const [count, setCount] = useState(0)
 
   return (
     <>
-      <div className="flex items-center justify-center min-h-screen bg-black">
-      <h1 className="text-4xl font-bold text-blue-300">Hello GMS AI-Assistant</h1>
+        <div className="min-h-screen bg-white flex justify-center items-start">
+      <Dashboard/>
     </div>
     </>
   )
