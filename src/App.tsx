@@ -1,7 +1,7 @@
 // import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
 import Dashboard from "./components/dashboard";
 
 const App: React.FC = () => {
@@ -9,11 +9,11 @@ const App: React.FC = () => {
 
   return (
     <>
-        <div className="min-h-screen bg-white flex justify-center items-start">
-      <Dashboard/>
-    </div>
+      <div className="min-h-screen bg-gray-200 flex justify-center items-start">
+        <Dashboard />
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
