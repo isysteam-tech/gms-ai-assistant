@@ -48,14 +48,14 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
                 My Workspace
               </h2>
             ) : (
-              <div className="w-6 h-6 bg-indigo-500 rounded-md" />
+              <></>
             )}
             <button
               onClick={() => setIsOpen(!isOpen)}
               aria-label="Toggle Sidebar"
               className="text-gray-600 hover:text-indigo-600"
             >
-              {isOpen ? <RiCloseLine size={22} /> : <RiMenu2Line size={22} />}
+              {isOpen ? <RiCloseLine size={22} /> : <RiMenu2Line size={26} />}
             </button>
           </div>
 
