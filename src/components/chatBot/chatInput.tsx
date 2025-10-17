@@ -63,7 +63,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
           <img src={images} alt="images"/>
           <img src={audio} alt="audio"/>
           <div className="text-gray-300">|</div>
-          <img src={sentPlane} alt="sentPlane"/>
+          <img src={sentPlane} alt="sentPlane" onClick={handleSend} />
         </div>
         </div>
         
