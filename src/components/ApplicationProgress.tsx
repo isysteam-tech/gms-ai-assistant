@@ -6,7 +6,7 @@ const ApplicationProgress = () => {
   return (
     <div>
           {/* Right dashboard vertical card */}
-<div className="w-80 h-185 bg-white rounded-3xl shadow-md p-6 space-y-6 font-sans overflow-y-auto hide-scrollbar">
+<div className="w-80 h-full bg-white rounded-3xl shadow-md p-6 space-y-6 font-sans overflow-y-auto hide-scrollbar">
       {/* Overall Completion */}
       <div>
         <p className="text-gray-700 font-medium">Application Progress</p>

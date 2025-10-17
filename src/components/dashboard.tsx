@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { RxQuestionMarkCircled } from "react-icons/rx";
 import { GrCircleAlert } from "react-icons/gr";
@@ -17,9 +17,16 @@ import audio from "../assets/voice.svg";
 import sentPlane from "../assets/sentPlane.svg";
 import abstract from "../assets/abstract 4 1.svg";
 import { useNavigate } from "react-router-dom";
+import MyDashboard from "./mydashboard";
+import ApplicationProgress from "./ApplicationProgress";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [isChat, setIsChat] = useState(true);
+
+  const handleChatClick = () => {
+    navigate("/chatwindow");
+  };
 
   const features = [
     {
@@ -66,6 +73,7 @@ const Dashboard = () => {
 
   return (
     <>
+    <div className="flex">
       <div className="w-full max-h-screen bg-gray-50">
         {/* Main Content Area */}
         <div className="flex flex-col lg:flex-row gap-4 p-4 lg:p-6 max-w-[1920px] mx-auto">
@@ -84,13 +92,17 @@ const Dashboard = () => {
               </div>
 
               <div className="flex items-center gap-3">
-                <RxQuestionMarkCircled className="text-gray-700 text-4xl bg-white rounded-full p-2 shadow cursor-pointer hover:shadow-md transition-shadow" />
+                <RxQuestionMarkCircled className="text-gray-700 text-4xl bg-white rounded-full p-2 shadow" />
                 <Button
+                  onClick={handleChatClick}
                   variant="outline"
-                  className="text-sm bg-black text-white  rounded-full hover:bg-gray-900 border-0 px-8 lg:px-12 py-5 whitespace-nowrap"
-                  onClick={() => navigate("/chatWindow")}
+                  className="text-sm bg-black text-white rounded-full hover:bg-gray-900 border-0  w-40 px-4 lg:px-12 py-5 whitespace-nowrap"
                 >
-                  <img src={icon} alt="symbol" className="me-2 h-5" />
+                  <img
+                    src={icon}
+                    alt="symbol"
+                    className="me-2 h-5"
+                  />
                   Switch To Chat
                 </Button>
               </div>
@@ -172,12 +184,12 @@ const Dashboard = () => {
                           {action.label}
                         </div>
                       </div>
-                    ))} 
+                    ))}
                     <div className="flex gap-2">
                       <img src={zsh} alt="zsh" />
                       <img src={chatLink} alt="chatLink" />
                       <img src={aiSearchTwo} alt="aiSearch" />
-                    </div> 
+                    </div>
 
                     {/* Action Icons */}
                     <div className="flex-1 flex items-center justify-end gap-2">
@@ -190,8 +202,15 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-
         </div>
+      </div>
+      <div className="">
+        <div className="flex gap-4 p-4 h-screen">
+
+          {/* <ApplicationProgress/> */}
+           <MyDashboard /> 
+        </div>
+      </div>
       </div>
     </>
   );

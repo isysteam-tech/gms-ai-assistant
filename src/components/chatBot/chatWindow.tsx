@@ -4,6 +4,7 @@ import ChatInput from "./chatInput";
 import chatGpt from "../../assets/chat-gpt.svg";
 import { FaRegShareSquare } from "react-icons/fa";
 import { PiDotsThreeVertical, PiLinkSimple } from "react-icons/pi";
+import ApplicationProgress from "../ApplicationProgress";
 // import QuickActions from "./quickActions";
 
 interface Message {
@@ -44,6 +45,7 @@ I can help you `,
   // const handleQuickAction = (option: string) => handleSend(option);
 
   return (
+    <div className="flex gap-2 h-full">
     <div className="flex flex-col h-[90vh] w-full max-w-screen mx-auto mt-5  rounded-2xl shadow-md bg-white overflow-hidden">
       <div className="flex justify-between space-x-95 px-2 py-1 border-b border-b-gray-300">
         <div className="flex space-x-1 px-2 py-1">
@@ -87,6 +89,8 @@ I can help you `,
 
       {/* Input */}
       <ChatInput onSend={handleSend} />
+    </div>
+     <ApplicationProgress />
     </div>
   );
 };
