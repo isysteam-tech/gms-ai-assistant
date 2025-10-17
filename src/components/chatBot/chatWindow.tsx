@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ChatHeader from "./chatHeader";
 import MessageBubble from "./messageBubble";
 import ChatInput from "./chatInput";
 // import QuickActions from "./quickActions";
@@ -45,10 +44,6 @@ I can help you `,
 
   return (
     <div className="flex flex-col h-[90vh] w-full max-w-2xl mx-auto mt-5 border rounded-2xl shadow-md bg-white overflow-hidden">
-      {/* Sticky Header */}
-      <div className="sticky top-0 z-10 bg-white shadow-sm">
-        <ChatHeader />
-      </div>
 
       {/* Messages Section */}
       <div className="flex-1 overflow-y-auto px-4 py-4">
