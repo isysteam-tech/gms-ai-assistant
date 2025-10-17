@@ -13,6 +13,7 @@ import claims from "../assets/claims.svg";
 import saved from "../assets/saved.svg";
 import company from "../assets/company.svg";
 import history from "../assets/clock-04.svg";
+import { useNavigate } from "react-router-dom";
 
 interface SidebarLayoutProps {
   children: ReactNode;
@@ -22,6 +23,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [appOpen, setAppOpen] = useState(false);
   const [active, setActive] = useState("Chat With Assistant");
+  const navigate = useNavigate();
 
   const navItems = [
     { icon: chatgpt, label: "Chat With Assistant" },

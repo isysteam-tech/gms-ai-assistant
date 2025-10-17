@@ -87,7 +87,8 @@ const Dashboard = () => {
                 <RxQuestionMarkCircled className="text-gray-700 text-4xl bg-white rounded-full p-2 shadow cursor-pointer hover:shadow-md transition-shadow" />
                 <Button
                   variant="outline"
-                  className="text-sm bg-black text-white rounded-full hover:bg-gray-900 border-0 px-8 lg:px-12 py-5 whitespace-nowrap"
+                  className="text-sm bg-black text-white  rounded-full hover:bg-gray-900 border-0 px-8 lg:px-12 py-5 whitespace-nowrap"
+                  onClick={() => navigate("/chatWindow")}
                 >
                   <img src={icon} alt="symbol" className="me-2 h-5" />
                   Switch To Chat
@@ -190,106 +191,6 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Right Side - Dashboard Card */}
-          <div className="w-full lg:w-[336px] lg:min-w-[336px] 2xl:w-[400px]">
-            <div className="bg-white shadow-lg rounded-2xl p-5 lg:p-6 sticky top-6">
-              {/* Dashboard Header */}
-              <div className="mb-5">
-                <h2 className="text-lg lg:text-xl font-semibold text-black mb-2">
-                  My Dashboard
-                </h2>
-                <p className="text-gray-500 text-xs lg:text-sm">
-                  Track your applications, manage claims, and discover new
-                  opportunities
-                </p>
-              </div>
-
-              {/* Summary Boxes */}
-              <div className="grid grid-cols gap-2 mb-5">
-                {[
-                  { value: "2", label: "Approved Amount" },
-                  { value: "1", label: "In Review" },
-                  { value: "$180K", label: "Approved Amount" },
-                  { value: "1", label: "Pending Claims" },
-                ].map((item, index) => (
-                  <div
-                    key={index}
-                    className="bg-gray-50 flex p-3 rounded-lg gap-2 items-center hover:bg-gray-100 transition-colors"
-                  >
-                    <p className="text-lg lg:text-xl font-bold text-black">
-                      {item.value}
-                    </p>
-                    <p className="text-xs text-gray-600 mt-1">{item.label}</p>
-                  </div>
-                ))}
-              </div>
-
-              <hr className="my-5 border-gray-200" />
-
-              {/* My Applications */}
-              <div>
-                <h3 className="text-sm lg:text-base font-semibold text-black mb-4">
-                  My Applications
-                </h3>
-
-                <div className="bg-gradient-to-br from-gray-50 to-blue-50 p-4 rounded-xl space-y-4">
-                  <p className="text-sm font-semibold text-black">
-                    Application Progress
-                  </p>
-
-                  <div className="space-y-3">
-                    <div>
-                      <p className="text-xs text-gray-600 mb-1">
-                        Application ID
-                      </p>
-                      <p className="text-sm font-medium text-black">
-                        APP-2025-0001
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-sm font-medium text-black flex items-center gap-2">
-                        <span>📅</span> February 12, 2025
-                      </p>
-                      <p className="text-xs text-gray-600 mt-1">
-                        Estimated Completion
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-sm font-medium text-black">Jane Lim</p>
-                      <p className="text-xs text-gray-600 mt-1">
-                        Current Officer
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-sm font-medium text-black flex items-center gap-2">
-                        <span>⏰</span> 05/02/2025
-                      </p>
-                      <p className="text-xs text-gray-600 mt-1">
-                        Next Milestone
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Progress Bar */}
-                  <div className="pt-2">
-                    <div className="flex justify-between text-xs text-gray-600 mb-2">
-                      <span>Progress</span>
-                      <span>33%</span>
-                    </div>
-                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-500"
-                        style={{ width: "33%" }}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </>
