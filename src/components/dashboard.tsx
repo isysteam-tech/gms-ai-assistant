@@ -23,7 +23,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     };
 
     return (
-        <div>
+        <div style={{width:"100%"}}>
             <button type="button" onClick={handleClick} className={className}>
                 {label}
             </button>
