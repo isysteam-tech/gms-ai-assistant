@@ -10,7 +10,7 @@ const App: React.FC = () => {
       <SidebarLayout>
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/chat" element={<ChatWindow />} />
+          <Route path="/chatWindow" element={<ChatWindow />} />
         </Routes>
       </SidebarLayout>
     </div>
