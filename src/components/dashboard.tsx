@@ -91,12 +91,12 @@ const Dashboard: React.FC<DashboardProps> = ({
         <div className="w-[750px] h-[290px] bg-white p-3 rounded-lg flex flex-col gap-3 shadow -ml-4">
           {/* First Row */}
           <div className="flex gap-2">
-            <div className="w-[252px] h-[128px] rounded-lg border border-gray-300 p-3 flex flex-col items-start justify-center gap-2"
-            onClick={() => navigate("/chat")}
+            <div
+              className="w-[252px] h-[128px] rounded-lg border border-gray-300 p-3 flex flex-col items-start justify-center gap-2"
+              onClick={() => navigate("/chat")}
             >
               {/* First row: SVG + text */}
-              <div
-                className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 <svg
                   width="24"
                   height="24"

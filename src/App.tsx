@@ -6,7 +6,7 @@ import ChatWindow from "./components/chatBot/chatWindow";
 
 const App: React.FC = () => {
   return (
-    <div className="bg-black">
+    <div>
       <SidebarLayout>
         <Routes>
           <Route path="/" element={<Dashboard />} />

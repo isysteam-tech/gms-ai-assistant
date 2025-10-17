@@ -33,7 +33,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
   ];
 
   return (
-    <div className="flex h-screen bg-[#f8fafc]">
+    <div className="flex h-screen bg-primary">
       {/* ===== Sidebar ===== */}
       <aside
         className={`${
