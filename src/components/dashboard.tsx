@@ -3,11 +3,7 @@ import { Button } from "../ui/button";
 import { RxQuestionMarkCircled } from "react-icons/rx";
 import abstractLogo from "../assets/wellcome.svg";
 import { GrCircleAlert } from "react-icons/gr";
-import { MdSavedSearch } from "react-icons/md";
-import { TfiLink } from "react-icons/tfi";
-import { RiGalleryLine } from "react-icons/ri";
-import { MdVoiceChat } from "react-icons/md";
-import { BsFillSendFill } from "react-icons/bs";
+import MyDashboard from "./mydashboard";
 import { useNavigate } from "react-router-dom";
 
 type DashboardProps = {
@@ -34,51 +30,57 @@ const Dashboard: React.FC<DashboardProps> = ({
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-white p-4 flex flex-col gap-6">
-      {/* First Div */}
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-black text-2xl font-bold">
-            Chat With GMS Assistant
-          </h1>
-          <p className="text-gray-700 text-sm mt-2">
-            Get smart recommendations, verify eligibility, and finish your grant
-            application end-to-end.
-          </p>
-        </div>
+    <>
+          <div className="flex items-start justify-between">
+   <div className="flex justify-start items-start p-1">
+  <div>
+    <h1 className="text-black text-2xl font-bold">
+      Chat With GMS Assistant
+    </h1>
+    <p className="text-gray-700 text-sm mt-2">
+      Get smart recommendations, verify eligibility, and finish your grant
+      application end-to-end.
+    </p>
+  </div>
+  <div className="flex items-center space-x-4 -ml-2">
+  <RxQuestionMarkCircled className="text-gray-700 text-4xl bg-white rounded-full p-2 shadow" />
 
-        <RxQuestionMarkCircled className="text-gray-700 text-4xl bg-white rounded-full p-2 shadow" />
+  <Button
+    variant="outline"
+    className="text-sm bg-black text-white rounded-full hover:bg-gray-900 border-0 px-12 py-5"
+  >
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="mr-2"
+    >
+      <path
+        d="M4.35464 9.44125L10.1865 1.95551C10.6426 1.37006 11.4975 1.73445 11.4975 2.51431V8.30837C11.4975 8.7755 11.8328 9.15425 12.2463 9.15425H15.0828C15.7273 9.15425 16.0708 10.0125 15.645 10.5589L9.81317 18.0447C9.35709 18.6301 8.50217 18.2657 8.50217 17.4858V11.6918C8.50217 11.2247 8.1669 10.8459 7.75334 10.8459H4.9168C4.27243 10.8459 3.92895 9.98767 4.35464 9.44125Z"
+        stroke="white"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+    Switch To Form
+  </Button>
+</div>
+</div>
 
-        <Button
-          variant="outline"
-          className="text-sm bg-black text-white rounded-full hover:bg-gray-900 border-0 px-12 py-5"
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4.35464 9.44125L10.1865 1.95551C10.6426 1.37006 11.4975 1.73445 11.4975 2.51431V8.30837C11.4975 8.7755 11.8328 9.15425 12.2463 9.15425H15.0828C15.7273 9.15425 16.0708 10.0125 15.645 10.5589L9.81317 18.0447C9.35709 18.6301 8.50217 18.2657 8.50217 17.4858V11.6918C8.50217 11.2247 8.1669 10.8459 7.75334 10.8459H4.9168C4.27243 10.8459 3.92895 9.98767 4.35464 9.44125Z"
-              stroke="white"
-              stroke-width="1.25"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          Switch To Form
-        </Button>
+
       </div>
 
+
       {/* Container Below */}
-      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-3xl mx-auto min-h-[578px]">
-        <div className="flex flex-col justify-center items-center p-4">
+  <div className="bg-white p-6 rounded-3xl shadow-md w-[850px] mx-auto min-h-[630px] ml-2 mt-4">
+        <div className="flex flex-col justify-center items-center p-1 -mt-2">
           <img
             src={abstractLogo}
             alt="Abstract Logo"
-            className="w-22 h-22 object-contain"
+            className="w-18 h-18 object-contain"
           />
           <h1 className="text-black text-2xl font-bold">
             Welcome To The GMS InTake Assistant
@@ -88,15 +90,14 @@ const Dashboard: React.FC<DashboardProps> = ({
             AnyTime.
           </p>
         </div>
-        <div className="w-[750px] h-[290px] bg-white p-3 rounded-lg flex flex-col gap-3 shadow -ml-4">
+
           {/* First Row */}
-          <div className="flex gap-2">
-            <div className="w-[252px] h-[128px] rounded-lg border border-gray-300 p-3 flex flex-col items-start justify-center gap-2"
+<div className="flex gap-2 mt-4 ml-2">
+            <div className="w-[252px] h-[128px] rounded-2xl border border-gray-300 p-3 flex flex-col items-start justify-center gap-2"
             onClick={() => navigate("/chat")}
             >
               {/* First row: SVG + text */}
-              <div
-                className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 <svg
                   width="24"
                   height="24"
@@ -128,7 +129,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               </p>
             </div>
 
-            <div className="w-[252px] h-[128px] rounded-lg border border-gray-300 p-3 flex flex-col items-start justify-center gap-2">
+            <div className="w-[252px] h-[128px] rounded-2xl border border-gray-300 p-3 flex flex-col items-start justify-center gap-2  ml-4">
               {/* First row: SVG + text */}
               <div className="flex items-center gap-2">
                 <svg
@@ -169,13 +170,12 @@ const Dashboard: React.FC<DashboardProps> = ({
               </div>
 
               {/* Second row: sentence below */}
-              <p className="text-gray-500 text-sm mt-2">
-                Create a project and pre-fill Company details from
-                documents/MyInfo.
-              </p>
+           <p className="text-gray-500 text-sm mt-2 w-[250px]">
+  Create a project and pre-fill Company details from documents/MyInfo.
+</p>
             </div>
 
-            <div className="w-[252px] h-[128px] rounded-lg border border-gray-300 p-3 flex flex-col items-start justify-center gap-2">
+            <div className="w-[252px] h-[128px] rounded-2xl border border-gray-300 p-3 flex flex-col items-start justify-center gap-2  ml-2">
               {/* First row: SVG + text */}
               <div className="flex items-center gap-2">
                 <svg
@@ -211,8 +211,8 @@ const Dashboard: React.FC<DashboardProps> = ({
           </div>
 
           {/* Second Row */}
-          <div className="flex gap-2">
-            <div className="w-[252px] h-[128px] rounded-lg border border-gray-300 p-3 flex flex-col items-start justify-center gap-2">
+       <div className="flex gap-2 mt-4 ml-2">
+            <div className="w-[252px] h-[128px] rounded-2xl border border-gray-300 p-3 flex flex-col items-start justify-center gap-2">
               {/* First row: SVG + text */}
               <div className="flex items-center gap-2">
                 <svg
@@ -243,7 +243,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                 Build a Compliant budgest with caps, quotes, and guardrails.
               </p>
             </div>
-            <div className="w-[252px] h-[128px] rounded-lg border border-gray-300 p-3 flex flex-col items-start justify-center gap-2">
+            <div className="w-[252px] h-[128px] rounded-2xl border border-gray-300 p-3 flex flex-col items-start justify-center gap-2  ml-4">
               {/* First row: SVG + text */}
               <div className="flex items-center gap-2">
                 <svg
@@ -280,7 +280,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                 Upload evidence: AI flags issues and suggests fixes.
               </p>
             </div>
-            <div className="w-[252px] h-[128px] rounded-lg border border-gray-300 p-3 flex flex-col items-start justify-center gap-2">
+            <div className="w-[252px] h-[128px] rounded-2xl border border-gray-300 p-3 flex flex-col items-start justify-center gap-2  ml-2">
               {/* First row: SVG + text */}
               <div className="flex items-center gap-2">
                 <svg
@@ -323,21 +323,13 @@ const Dashboard: React.FC<DashboardProps> = ({
               </p>
             </div>
           </div>
-        </div>
-        {/* <div className="w-full h-full p-2">
-    
-<input
-  type="text"
-  placeholder="Enter text"
-  className="w-full h-20 border border-gray-300 rounded-md p-2"
-/>
 
-</div>  */}
 
-        <div className="w-[775px] h-[110px] p-2 -ml-7">
-          <div className="shadow-sm relative">
+
+
+          <div className=" relative mt-4  p-2">
             {/* Card Title / Message with X */}
-            <div className="flex justify-between items-center bg-blue-50 px-3 py-2 rounded-t-md">
+            <div className="flex justify-between  items-center bg-blue-50 px-3 py-2 rounded-lg">
               <p className="text-blue-700 font-medium flex items-center gap-2">
                 <GrCircleAlert />
                 By selecting a feature, it will make your goal easier to achieve
@@ -355,11 +347,12 @@ const Dashboard: React.FC<DashboardProps> = ({
             <input
               type="text"
               placeholder='Type "start intake", paste a UEN, or drop a BizFile/ACRA PDF...'
-              className="w-full h-20 border border-gray-300 border-t-0 rounded-b-md px-3 pb-10 pt-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full h-30 border border-gray-300 border-t-0 rounded-lg px-3 pb-10 pt-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
 
             {/* Rounded Pill inside the input */}
-            <div className="absolute bottom-2 left-3 flex gap-2">
+<div className="absolute bottom-6 left-3 flex gap-2">
+
               {/* Circle 1 */}
               <div
                 className="h-6 w-[101px] rounded-full p-[1px] 
@@ -389,16 +382,163 @@ const Dashboard: React.FC<DashboardProps> = ({
                   Run One-Tap Verification
                 </div>
               </div>
-              <TfiLink />
-              <MdSavedSearch />
-              <RiGalleryLine className="ml-55" />
-              <MdVoiceChat className="ml-2" />
-              <BsFillSendFill className="ml-1" />
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 17.5C13.1247 17.5 14.6872 17.5 15.7824 16.7042C16.1362 16.4472 16.4472 16.1362 16.7042 15.7824C17.5 14.6872 17.5 13.1247 17.5 10C17.5 6.87522 17.5 5.31283 16.7042 4.21756C16.4472 3.86383 16.1362 3.55276 15.7824 3.29576C14.6872 2.5 13.1247 2.5 10 2.5C6.87522 2.5 5.31283 2.5 4.21756 3.29576C3.86383 3.55276 3.55276 3.86383 3.29576 4.21756C2.5 5.31283 2.5 6.87522 2.5 10C2.5 13.1247 2.5 14.6872 3.29576 15.7824C3.55276 16.1362 3.86383 16.4472 4.21756 16.7042C5.31283 17.5 6.87522 17.5 10 17.5Z" stroke="#99A0AE" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13.3332 5.83325L6.6665 14.1666" stroke="#99A0AE" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M7.61933 8.90915L7.79176 8.73674C9.44067 7.08775 12.1142 7.08775 13.7631 8.73674C15.4121 10.3857 15.4121 13.0592 13.7631 14.7081L11.3746 17.0966C9.72567 18.7456 7.05216 18.7456 5.40321 17.0966C3.75427 15.4477 3.75427 12.7742 5.40321 11.1252L5.79017 10.7383" stroke="#99A0AE" stroke-width="1.25" stroke-linecap="round"/>
+<path d="M14.2097 9.26175L14.5966 8.87483C16.2456 7.22587 16.2456 4.5524 14.5966 2.90345C12.9477 1.25451 10.2742 1.25451 8.62525 2.90345L6.23671 5.292C4.58776 6.94095 4.58776 9.61441 6.23671 11.2633C7.88566 12.9123 10.5592 12.9123 12.2081 11.2633L12.3805 11.0909" stroke="#99A0AE" stroke-width="1.25" stroke-linecap="round"/>
+</svg>
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.3335 13.75L16.6667 17.0833" stroke="#99A0AE" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M15.0002 9.58331C15.0002 12.805 12.3885 15.4166 9.16683 15.4166C5.94517 15.4166 3.3335 12.805 3.3335 9.58331C3.3335 6.36168 5.94517 3.75 9.16683 3.75" stroke="#99A0AE" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12.9167 2.91675L13.1316 3.49761C13.4134 4.25926 13.5543 4.6401 13.8322 4.91791C14.11 5.19572 14.4908 5.33664 15.2525 5.61848L15.8333 5.83341L15.2525 6.04835C14.4908 6.33019 14.11 6.47111 13.8322 6.74892C13.5543 7.02673 13.4134 7.40756 13.1316 8.16922L12.9167 8.75006L12.7017 8.16922C12.4199 7.40756 12.279 7.02673 12.0012 6.74892C11.7233 6.47111 11.3425 6.33019 10.5808 6.04835L10 5.83341L10.5808 5.61848C11.3425 5.33664 11.7233 5.19572 12.0012 4.91791C12.279 4.6401 12.4199 4.25926 12.7017 3.49761L12.9167 2.91675Z" stroke="#99A0AE" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+<div className="ml-60 flex gap-2">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.0835 9.99992C2.0835 6.26797 2.0835 4.40199 3.24286 3.24262C4.40224 2.08325 6.26821 2.08325 10.0002 2.08325C13.7321 2.08325 15.5981 2.08325 16.7575 3.24262C17.9168 4.40199 17.9168 6.26797 17.9168 9.99992C17.9168 13.7318 17.9168 15.5978 16.7575 16.7573C15.5981 17.9166 13.7321 17.9166 10.0002 17.9166C6.26821 17.9166 4.40224 17.9166 3.24286 16.7573C2.0835 15.5978 2.0835 13.7318 2.0835 9.99992Z" stroke="#99A0AE" stroke-width="1.25"/>
+<path d="M13.75 7.5C14.4404 7.5 15 6.94036 15 6.25C15 5.55964 14.4404 5 13.75 5C13.0596 5 12.5 5.55964 12.5 6.25C12.5 6.94036 13.0596 7.5 13.75 7.5Z" stroke="#99A0AE" stroke-width="1.25"/>
+<path d="M13.3333 18.3334C12.8171 16.4791 11.6121 14.8185 9.89708 13.6119C8.04801 12.3108 5.72636 11.6222 3.34641 11.669C3.06382 11.6683 2.78147 11.6773 2.5 11.696" stroke="#99A0AE" stroke-width="1.25" stroke-linejoin="round"/>
+<path d="M10.8335 14.9999C12.2514 13.8943 13.7789 13.3272 15.322 13.3333C16.197 13.3324 17.0678 13.5179 17.9168 13.8846" stroke="#99A0AE" stroke-width="1.25" stroke-linejoin="round"/>
+</svg>
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.0835 9.99992C2.0835 6.26797 2.0835 4.40199 3.24286 3.24262C4.40224 2.08325 6.26821 2.08325 10.0002 2.08325C13.7321 2.08325 15.5981 2.08325 16.7575 3.24262C17.9168 4.40199 17.9168 6.26797 17.9168 9.99992C17.9168 13.7318 17.9168 15.5978 16.7575 16.7573C15.5981 17.9166 13.7321 17.9166 10.0002 17.9166C6.26821 17.9166 4.40224 17.9166 3.24286 16.7573C2.0835 15.5978 2.0835 13.7318 2.0835 9.99992Z" stroke="#99A0AE" stroke-width="1.25"/>
+<path d="M10 6.66675V13.3334" stroke="#99A0AE" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M7.5 8.33325V11.6666" stroke="#99A0AE" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M5 9.16675V10.8334" stroke="#99A0AE" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12.5 8.33325V11.6666" stroke="#99A0AE" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M15 9.16675V10.8334" stroke="#99A0AE" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.9979 2.11873C17.6084 1.69924 16.9977 1.54211 16.4142 1.48587C15.8011 1.42678 15.0668 1.46608 14.2762 1.56977C12.6908 1.77773 10.7753 2.2591 8.93533 2.85139C7.09417 3.44404 5.29945 4.15713 3.95538 4.84031C3.28646 5.18032 2.70628 5.52435 2.28451 5.8548C2.07449 6.01934 1.88285 6.19659 1.73869 6.38523C1.60119 6.56516 1.45653 6.82116 1.45852 7.12977C1.46374 7.93984 2.01541 8.51234 2.60289 8.89659C3.20253 9.28884 3.98348 9.58442 4.75984 9.81592C5.54453 10.0499 6.36972 10.2313 7.07911 10.3783C7.1256 10.3878 7.21852 10.4071 7.33239 10.4306C7.76119 10.5192 7.97559 10.5635 8.17714 10.5032C8.37867 10.4428 8.53367 10.2879 8.8435 9.978L11.9109 6.91066C12.2363 6.58523 12.764 6.58523 13.0894 6.91066C13.4148 7.2361 13.4148 7.76374 13.0894 8.08918L10.2289 10.9497C9.913 11.2656 9.75508 11.4235 9.69533 11.6285C9.6355 11.8335 9.68375 12.0511 9.78017 12.4863C10.1538 14.1736 10.4783 15.5678 10.8021 16.5058C10.9912 17.0537 11.2039 17.5279 11.4733 17.8777C11.7545 18.2427 12.137 18.5184 12.6404 18.5407C12.9538 18.5545 13.2144 18.4114 13.3931 18.2786C13.5814 18.1388 13.7585 17.9511 13.9227 17.746C14.2527 17.3337 14.5995 16.7632 14.9445 16.1038C15.6378 14.7788 16.372 13.0023 16.9933 11.1746C17.6142 9.34767 18.1316 7.44209 18.3808 5.85834C18.5052 5.0685 18.5667 4.33498 18.5325 3.72056C18.5001 3.13789 18.3759 2.5258 17.9979 2.11873Z" fill="url(#paint0_linear_122_12240)"/>
+<defs>
+<linearGradient id="paint0_linear_122_12240" x1="18.2571" y1="2.15553" x2="-1.40044" y2="11.8083" gradientUnits="userSpaceOnUse">
+<stop stop-color="#6895FF"/>
+<stop offset="1" stop-color="#A897FF"/>
+</linearGradient>
+</defs>
+</svg>
+
+</div>
             </div>
           </div>
         </div>
+   
+  <div className="flex gap-4 p-4 -mt-190 ml-215 h-192">
+  {/* Left section */}
+
+
+  {/* Right dashboard vertical card */}
+<div className="w-[320px] bg-white shadow p-4 flex flex-col gap-4 rounded-2xl">
+    {/* Dashboard Header */}
+    <div>
+      <h2 className="text-lg font-semibold">My Dashboard</h2>
+      <p className="text-gray-500 text-sm">
+        Track your applications, manage claims, and discover new opportunities
+      </p>
+    </div>
+
+    {/* Summary Boxes */}
+    <div className="flex flex-col gap-2">
+      <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
+        <span>2</span>
+        <span>Approved Amount</span>
+      </div>
+      <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
+        <span>1</span>
+        <span>In Review</span>
+      </div>
+      <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
+        <span>$180K</span>
+        <span>Approved Amount</span>
+      </div>
+      <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
+        <span>1</span>
+        <span>Pending Claims</span>
       </div>
     </div>
+
+    <hr className="my-2" />
+
+    {/* My Applications */}
+    <div className="flex flex-col gap-2">
+      <h3 className="text-sm font-semibold">My Applications</h3>
+
+      {/* <div className="flex flex-col gap-1 bg-gray-50 p-3 rounded-lg h-80">
+        <p className="text-sm font-medium">Application Progress</p>
+        <p className="text-gray-500 text-xs">Application ID: APP-2025-0001</p>
+
+        <p className="text-gray-500 text-xs flex items-center gap-1">
+          <span>📅</span> February 12, 2025 Estimated Completion
+        </p>
+        <p className="text-gray-500 text-xs flex items-center gap-1">
+          <span>👤</span> Jane Lim Current Officer
+        </p>
+        <p className="text-gray-500 text-xs flex items-center gap-1">
+          <span>⏰</span> 05/02/2025 Next Milestone
+        </p>
+
+        {/* Progress Bar */}
+        <div className="w-full h-2 bg-gray-200 rounded-full mt-2">
+          <div className="h-2 bg-blue-500 rounded-full w-1/3"></div>
+        </div>
+      {/* </div> */} 
+      <div className="flex flex-col gap-3 bg-gray-50 p-3 rounded-lg h-80">
+
+  <p className="text-black text-sm font-medium">
+    Application Progress
+  </p>
+
+
+  <p className="text-gray-700 text-xs">
+    Application ID: 
+  </p>
+
+    <p className="text-gray-700 text-xs">
+APP-2025-0001
+  </p>
+
+
+
+  <p className="text-black text-sm font-medium">
+   <span>📅</span> February 12, 2025
+  </p>
+
+ <p className="text-gray-700 text-xs">
+ Estimated Completion
+  </p>
+
+
+  <p className="text-black text-sm font-medium ">
+Jane Lim
+  </p>
+
+   <p className="text-gray-700 text-xs">
+ Current Officer
+  </p>
+
+
+<p className="text-black text-sm font-medium ">
+  <span>⏰</span> 05/02/2025
+</p>
+
+<p className="text-gray-700 text-xs ">
+  Next Milestone
+</p>
+
+
+
+  <div className="w-full h-2 bg-gray-200 rounded-full mt-2">
+    <div className="h-2 bg-blue-500 rounded-full w-1/3"></div>
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+
+    </>
   );
 };
 
