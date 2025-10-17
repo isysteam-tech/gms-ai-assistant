@@ -17,9 +17,7 @@ const ChatWindow: React.FC = () => {
 I can help you `,
       isUser: false,
       timestamp: "",
-      quickActions: [
-        "",
-      ],
+      quickActions: [""],
     },
   ]);
 
@@ -44,7 +42,6 @@ I can help you `,
 
   return (
     <div className="flex flex-col h-[90vh] w-full max-w-2xl mx-auto mt-5 border rounded-2xl shadow-md bg-white overflow-hidden">
-
       {/* Messages Section */}
       <div className="flex-1 overflow-y-auto px-4 py-6">
         {messages.map((msg, idx) => (

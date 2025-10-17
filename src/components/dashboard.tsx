@@ -8,6 +8,7 @@ import { TfiLink } from "react-icons/tfi";
 import { RiGalleryLine } from "react-icons/ri";
 import { MdVoiceChat } from "react-icons/md";
 import { BsFillSendFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 type DashboardProps = {
   to?: string;
@@ -29,6 +30,8 @@ const Dashboard: React.FC<DashboardProps> = ({
       window.location.href = to;
     }
   };
+
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-white p-4 flex flex-col gap-6">
@@ -88,9 +91,12 @@ const Dashboard: React.FC<DashboardProps> = ({
         <div className="w-[750px] h-[290px] bg-white p-3 rounded-lg flex flex-col gap-3 shadow -ml-4">
           {/* First Row */}
           <div className="flex gap-2">
-            <div className="w-[252px] h-[128px] rounded-lg border border-gray-300 p-3 flex flex-col items-start justify-center gap-2">
+            <div className="w-[252px] h-[128px] rounded-lg border border-gray-300 p-3 flex flex-col items-start justify-center gap-2"
+            onClick={() => navigate("/chat")}
+            >
               {/* First row: SVG + text */}
-              <div className="flex items-center gap-2">
+              <div
+                className="flex items-center gap-2">
                 <svg
                   width="24"
                   height="24"
