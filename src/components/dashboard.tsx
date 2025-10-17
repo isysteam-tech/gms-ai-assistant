@@ -14,7 +14,7 @@ type DashboardProps = {
 };
 
 const Dashboard: React.FC<DashboardProps> = ({
-  to = "/ChatWindow",
+  to = "/chatWindow",
   //   label = "Open Chat",
   className = "",
   newTab = false,
