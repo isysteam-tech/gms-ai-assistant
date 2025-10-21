@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Button } from "../ui/button";
-import { RxQuestionMarkCircled } from "react-icons/rx";
 import { GrCircleAlert } from "react-icons/gr";
 import aisearch from "../assets/ai-search-03.svg";
 import application from "../assets/document-validation.svg";
@@ -8,7 +6,6 @@ import project from "../assets/license.svg";
 import budget from "../assets/pie-chart.svg";
 import document from "../assets/ai-image.svg";
 import track from "../assets/code.svg";
-import icon from "../assets/Icon.svg";
 import zsh from "../assets/zsh.svg";
 import chatLink from "../assets/chatLink.svg";
 import aiSearchTwo from "../assets/ai-search-02.svg";
@@ -18,7 +15,7 @@ import sentPlane from "../assets/sentPlane.svg";
 import abstract from "../assets/abstract 4 1.svg";
 import { useNavigate } from "react-router-dom";
 import MyDashboard from "./mydashboard";
-import ApplicationProgress from "./ApplicationProgress";
+import MainHeader from "./MainHeader";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -80,33 +77,7 @@ const Dashboard = () => {
           {/* Left Side - Main Content */}
           <div className="flex-1 lg:max-w-[calc(100%-352px)] 2xl:max-w-[1200px]">
             {/* Header Section */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-              <div>
-                <h1 className="text-2xl lg:text-3xl font-bold text-black">
-                  Chat With GMS Assistant
-                </h1>
-                <p className="text-sm text-gray-700 mt-2">
-                  Get smart recommendations, verify eligibility, and finish your
-                  grant application end-to-end.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <RxQuestionMarkCircled className="text-gray-700 text-4xl bg-white rounded-full p-2 shadow" />
-                <Button
-                  onClick={handleChatClick}
-                  variant="outline"
-                  className="text-sm bg-black text-white rounded-full hover:bg-gray-900 border-0  w-40 px-4 lg:px-12 py-5 whitespace-nowrap"
-                >
-                  <img
-                    src={icon}
-                    alt="symbol"
-                    className="me-2 h-5"
-                  />
-                  Switch To Chat
-                </Button>
-              </div>
-            </div>
+            <MainHeader />
 
             {/* Welcome Card */}
             <div className="bg-white rounded-3xl shadow-md p-6 lg:p-8">
