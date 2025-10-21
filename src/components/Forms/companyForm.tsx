@@ -1,6 +1,7 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { BsInfoCircleFill } from "react-icons/bs";
 
 const CompanyForm = () => {
   const validationSchema = Yup.object().shape({
@@ -32,49 +33,70 @@ const CompanyForm = () => {
     >
       {() => (
         <Form className="grid gap-4">
-          <div>
-            <label className="font-medium">Company Name *</label>
-            <Field
-              name="companyName"
-              className="border rounded-md w-full p-2 mt-1"
-            />
-            <ErrorMessage
-              name="companyName"
-              component="div"
-              className="text-red-500 text-sm"
-            />
-          </div>
 
-          <div>
-            <label className="font-medium">UEN *</label>
-            <Field name="uen" className="border rounded-md w-full p-2 mt-1" />
-            <ErrorMessage
-              name="uen"
-              component="div"
-              className="text-red-500 text-sm"
-            />
+               <div className="flex gap-4">
+          
+            <div className="flex-1">
+              <label className="font-medium text-gray-400 flex items-center gap-1">
+                Company Name <span className="text-red-500">*</span> <BsInfoCircleFill className="text-gray-400" />
+              </label>
+              <Field
+                name="companyName"
+                className="bg-gray-100 rounded-md w-full p-2 mt-1"
+              />
+              <ErrorMessage
+                name="companyName"
+                component="div"
+                className="text-red-500 text-sm"
+              />
+            </div>
+          
+            {/* Project Description */}
+            <div className="flex-1">
+              <label className="font-medium text-gray-400 flex items-center gap-1">
+                UEN <span className="text-red-500">*</span> <BsInfoCircleFill className="text-gray-400" />
+              </label>
+              <Field
+          
+                name="uen"
+                className="bg-gray-100 rounded-md w-full p-2 mt-1"
+              />
+              <ErrorMessage
+                name="uen"
+                component="div"
+                className="text-red-500 text-sm"
+              />
+            </div>
           </div>
+    
 
-          <div>
-            <label className="font-medium">Registered Address *</label>
-            <Field
-              as="textarea"
-              name="address"
-              className="border rounded-md w-full p-2 mt-1"
-            />
-            <ErrorMessage
-              name="address"
-              component="div"
-              className="text-red-500 text-sm"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="font-medium">Business Sector *</label>
+                             <label className="font-medium text-gray-400 flex items-center gap-1">
+                    Registered Address <span className="text-red-500">*</span> <BsInfoCircleFill className="text-gray-400" />
+                  </label>
+                              <Field
+                                name="address"
+             className="bg-gray-100 rounded-md w-[1145px] p-2 mt-1"
+                       as="textarea"
+                              />
+                              <ErrorMessage
+                                name="address"
+                                component="div"
+                                className="text-red-500 text-sm"
+                              />
+                            </div>
+
+
+
+       <div className="flex gap-4">
+          
+            <div className="flex-1">
+              <label className="font-medium text-gray-400 flex items-center gap-1">
+                Business Sector <span className="text-red-500">*</span> <BsInfoCircleFill className="text-gray-400" />
+              </label>
               <Field
                 name="sector"
-                className="border rounded-md w-full p-2 mt-1"
+                className="bg-gray-100 rounded-md w-full p-2 mt-1"
               />
               <ErrorMessage
                 name="sector"
@@ -82,12 +104,16 @@ const CompanyForm = () => {
                 className="text-red-500 text-sm"
               />
             </div>
-
-            <div>
-              <label className="font-medium">Employee Count *</label>
+          
+            {/* Project Description */}
+            <div className="flex-1">
+              <label className="font-medium text-gray-400 flex items-center gap-1">
+                Employee Count <span className="text-red-500">*</span> <BsInfoCircleFill className="text-gray-400" />
+              </label>
               <Field
+          
                 name="employees"
-                className="border rounded-md w-full p-2 mt-1"
+                className="bg-gray-100 rounded-md w-full p-2 mt-1"
               />
               <ErrorMessage
                 name="employees"
@@ -96,6 +122,7 @@ const CompanyForm = () => {
               />
             </div>
           </div>
+
         </Form>
       )}
     </Formik>
