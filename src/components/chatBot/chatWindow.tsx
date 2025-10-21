@@ -55,7 +55,7 @@ const ChatWindow: React.FC = () => {
   return (
     <div className="flex gap-2 h-screen">
       <div className="w-full max-w-screen">
-        <div className="">
+        <div>
            <MainHeader
           buttonLabel="Switch To Form"
           icon={flash}
