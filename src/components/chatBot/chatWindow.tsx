@@ -8,7 +8,7 @@ import ApplicationProgress from "../ApplicationProgress";
 import MainHeader from "../MainHeader";
 import flash from '../../assets/flash.svg'
 import { useNavigate } from "react-router-dom";
-// import QuickActions from "./quickActions";
+import QuickActions from "./quickActions";
 
 interface Message {
   text: string;
@@ -20,11 +20,14 @@ interface Message {
 const ChatWindow: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
-      text: `Hello! I'm your AI Assistant 👋  
-I can help you `,
+      text: "🤖Hello! I'm your AI Assistant <br/> I can help you with: <br/>"+
+       "● 🏢Grant Applications - Apply for funding with government API integration <br/>"+ 
+      "● 💰Claim Submissions - Submit milestone and reimbursement claims <br/>"+
+       "●❓General Assistance - Answer questions about grants and processes <br/>"+
+       "What would you like to do today? You can simply tell me in your own words!",
       isUser: false,
       timestamp: "",
-      quickActions: [""],
+      quickActions: ["I want to apply for a grant", "I need to submit a claim", "Help me find suitable funding", "I have a question about my application"],
     },
   ]);
 
@@ -47,7 +50,7 @@ I can help you `,
     }, 800);
   };
 
-  // const handleQuickAction = (option: string) => handleSend(option);
+  const handleQuickAction = (option: string) => handleSend(option);
 
   return (
     <div className="flex gap-2 h-screen">
@@ -90,12 +93,12 @@ I can help you `,
                 timestamp={msg.timestamp}
                 avatar={msg.isUser ? "/user-avatar.png" : "/bot-avatar.png"}
               >
-                {/* {!msg.isUser && msg.quickActions && (
+                {!msg.isUser && msg.quickActions && (
               <QuickActions
                 options={msg.quickActions}
                 onClick={handleQuickAction}
               />
-            )} */}
+            )}
               </MessageBubble>
             ))}
           </div>

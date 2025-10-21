@@ -5,7 +5,6 @@ import aiSearch from "../../assets/ai-search-02.svg";
 import images from "../../assets/image-02.svg";
 import audio from "../../assets/voice.svg";
 import sentPlane from "../../assets/sentPlane.svg";
-import { Input } from "../../ui/input";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -33,43 +32,6 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
   };
 
   return (
-    // <div className="flex flex-col w-full max-w-3xl mx-auto mb-5 p-2">
-    //   <div className="border border-gray-300 rounded-lg overflow-hidden ">
-    //     <div>
-    //       <input
-    //         type="text"
-    //         placeholder="Type your message... I understand natural language!"
-    //         className="flex-1 px-4 py-2 outline-none"
-    //         onKeyDown={handleKeyDown}
-    //         value={input}
-    //         style={{ width: "100%" }}
-    //         onChange={(e) => setInput(e.target.value)}
-    //       />
-    //     </div>
-    //     <div className="flex space-x-1 px-2 py-1">
-    //       {inputButtons.map((action, index) => (
-    //         <div
-    //           key={index}
-    //           className={`h-6 ${action.width} rounded-full p-[1px] bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform`}
-    //         >
-    //           <div className="h-full w-full bg-white rounded-full flex items-center justify-center text-black text-xs font-medium px-2 whitespace-nowrap">
-    //             {action.label}
-    //           </div>
-    //         </div>
-    //       ))}{" "}
-    //       <div className="text-gray-300"> |</div>
-    //       <img src={zsh} alt="zsh" />
-    //       <img src={chatLink} alt="chatlink" />
-    //       <img src={aiSearch} alt="aisearch" />
-    //       <div className="flex space-x-1 px-2 py-1 ml-7">
-    //         <img src={images} alt="images" />
-    //         <img src={audio} alt="audio" />
-    //         <div className="text-gray-300">|</div>
-    //         <img src={sentPlane} alt="sentPlane" onClick={handleSend} />
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
     <div className="relative p-2">
       <input
         type="text"
