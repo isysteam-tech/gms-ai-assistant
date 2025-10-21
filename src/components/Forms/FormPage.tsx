@@ -5,7 +5,7 @@ import ContactForm from "./ContactForm";
 import ProjectForm from "./projectForm";
 import FundingForm from "./fundingForm";
 import MainHeader from "../MainHeader";
-import ApplicationProgress from "../ApplicationProgress";
+import ApplicationProgress from "../ApplicationBar/ApplicationProgress";
 import { useNavigate } from "react-router-dom";
 import icons from "../../assets/Icon.svg";
 import { MdKeyboardArrowLeft } from "react-icons/md";
@@ -66,7 +66,7 @@ const FormPage = () => {
   ))}
 </div> */}
 
-          <div className="flex gap-55 border-b pb-2 mb-6 bg-blue-100 w-full h-[60px] items-center">
+          <div className="flex gap-55 border-b pb-2 mb-6 bg-blue-100 w-full h-[60px] items-center ">
             {tabs.map((tab) => (
               <button
                 key={tab}

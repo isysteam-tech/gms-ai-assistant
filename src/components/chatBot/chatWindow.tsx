@@ -4,7 +4,7 @@ import ChatInput from "./chatInput";
 import chatGpt from "../../assets/chat-gpt.svg";
 import { FaRegShareSquare } from "react-icons/fa";
 import { PiDotsThreeVertical, PiLinkSimple } from "react-icons/pi";
-import ApplicationProgress from "../ApplicationProgress";
+import ApplicationProgress from "../ApplicationBar/ApplicationProgress";
 import MainHeader from "../MainHeader";
 import flash from '../../assets/flash.svg'
 import { useNavigate } from "react-router-dom";

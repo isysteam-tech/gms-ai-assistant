@@ -1,6 +1,6 @@
 import React from 'react'
-import greentick from "../assets/greentick.svg"
-import WhiteCircle from  "../assets/WhiteCircle.svg"
+import greentick from "../../assets/greentick.svg"
+import WhiteCircle from  "../../assets/WhiteCircle.svg"
 
 const ApplicationProgress = () => {
   return (
