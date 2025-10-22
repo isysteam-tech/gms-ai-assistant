@@ -1,10 +1,6 @@
 import React, { useState, type ReactNode } from "react";
 import { BsGear } from "react-icons/bs";
-import {
-  RiFeedbackLine,
-  RiMenu2Line,
-  RiCloseLine,
-} from "react-icons/ri";
+import { RiFeedbackLine, RiMenu2Line, RiCloseLine } from "react-icons/ri";
 import { FiChevronDown } from "react-icons/fi";
 import profile from "../assets/images/profile.png";
 import chatgpt from "../assets/chat-gpt.svg";
@@ -26,12 +22,12 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
   const navigate = useNavigate();
 
   const navItems = [
-    { icon: chatgpt, label: "Chat With Assistant" },
+    { icon: chatgpt, label: "Chat With Assistant", path: "/" },
     { icon: application, label: "My Applications" },
-    { icon: claims, label: "Claims" },
-    { icon: saved, label: "Saved Allowances" },
-    { icon: company, label: "Company Profile" },
-    { icon: history, label: "History", tag: "Beta" },
+    { icon: claims, label: "Claims", path: "/claims" },
+    { icon: saved, label: "Saved Allowances", path: "/saved" },
+    { icon: company, label: "Company Profile", path: "/company" },
+    { icon: history, label: "History", tag: "Beta", path: "/history" },
   ];
 
   return (
@@ -45,12 +41,10 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
         {/* --- Top Section --- */}
         <header className="p-4">
           <div className="flex items-center justify-between mb-8">
-            {isOpen ? (
+            {isOpen && (
               <h2 className="text-gray-700 font-semibold text-lg whitespace-nowrap">
                 My Workspace
               </h2>
-            ) : (
-              <></>
             )}
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -62,7 +56,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
           </div>
 
           {/* --- Navigation --- */}
-          <nav aria-label="Main Navigation" className="space-y-2 text-gray-700">
+          <nav aria-label="Main Navigation" className="space-y-2 text-gray-700 ">
             {navItems.map((item) => (
               <div key={item.label}>
                 {/* My Applications Dropdown */}
@@ -78,7 +72,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
                       } w-full p-2 rounded-xl transition-all ${
                         active === item.label
                           ? "bg-gradient-to-r from-[#A090E9] to-[#4D8AF1] text-white font-medium hover:opacity-90"
-                          : "hover:bg-gray-100 text-gray-700"
+                          : "hover:bg-gray-100 text-gray-700 "
                       }`}
                     >
                       <div className="flex items-center gap-3">
@@ -86,7 +80,9 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
                           src={item.icon}
                           alt={item.label}
                           className={`w-5 h-5 ${
-                            active === item.label ? "filter brightness-0 invert" : ""
+                            active === item.label
+                              ? "filter brightness-0 invert"
+                              : ""
                           }`}
                         />
                         {isOpen && <span>{item.label}</span>}
@@ -101,33 +97,47 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
                       )}
                     </button>
 
+                    {/* --- Dropdown Submenu --- */}
                     {appOpen && isOpen && (
                       <ul className="ml-9 mt-1 space-y-1 text-gray-600">
                         <li>
-                          <a
-                            href="#"
-                            className="block text-sm hover:text-indigo-600 transition"
+                          <button
+                            onClick={() => {
+                              navigate("/applications/app-source");
+                              setActive("App Source");
+                            }}
+                            className={`block text-sm w-full text-left hover:text-indigo-600 ${
+                              active === "App Source" ? "text-indigo-600" : ""
+                            }`}
                           >
                             App Source
-                          </a>
+                          </button>
                         </li>
                         <li>
-                          <a
-                            href="#"
-                            className="block text-sm hover:text-indigo-600 transition"
+                          <button
+                            onClick={() => {
+                              navigate("/applications/data");
+                              setActive("Data");
+                            }}
+                            className={`block text-sm w-full text-left hover:text-indigo-600 ${
+                              active === "Data" ? "text-indigo-600" : ""
+                            }`}
                           >
                             Data
-                          </a>
+                          </button>
                         </li>
                       </ul>
                     )}
                   </>
                 ) : (
                   // Normal nav item
-                  <a
-                    href="#"
-                    onClick={() => setActive(item.label)}
-                    className={`flex items-center gap-3 p-2 rounded-xl transition-all ${
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActive(item.label);
+                      if (item.path) navigate(item.path);
+                    }}
+                    className={`flex items-center gap-3 w-full p-2 rounded-xl transition-all ${
                       isOpen ? "justify-start" : "justify-center"
                     } ${
                       active === item.label
@@ -152,7 +162,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
                         )}
                       </>
                     )}
-                  </a>
+                  </button>
                 )}
               </div>
             ))}
@@ -160,12 +170,12 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
         </header>
 
         {/* --- Bottom Section --- */}
-        <footer className="border-t border-gray-200 p-4">
+        <footer className="border-t border-gray-200 p-4 ">
           <nav aria-label="Footer Navigation" className="space-y-3">
-            <a
-              href="#"
+            <button
+              type="button"
               onClick={() => setActive("Feedback")}
-              className={`flex items-center gap-3 transition ${
+              className={`flex items-center gap-3 transition w-full ${
                 active === "Feedback"
                   ? "bg-gradient-to-r from-[#A090E9] to-[#4D8AF1] text-white font-medium hover:opacity-90 rounded-xl p-2"
                   : "text-gray-600 hover:text-indigo-600"
@@ -173,12 +183,12 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
             >
               <RiFeedbackLine size={20} />
               {isOpen && <span>Feedback</span>}
-            </a>
+            </button>
 
-            <a
-              href="#"
+            <button
+              type="button"
               onClick={() => setActive("Settings")}
-              className={`flex items-center gap-3 transition ${
+              className={`flex items-center gap-3 transition w-full ${
                 active === "Settings"
                   ? "bg-gradient-to-r from-[#A090E9] to-[#4D8AF1] text-white font-medium hover:opacity-90 rounded-xl p-2"
                   : "text-gray-600 hover:text-indigo-600"
@@ -186,7 +196,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
             >
               <BsGear size={20} />
               {isOpen && <span>Settings</span>}
-            </a>
+            </button>
 
             {/* Profile */}
             <div

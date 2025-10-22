@@ -85,6 +85,37 @@ export default function FormPage() {
     console.log("Company Form Data:", values);
 
 
+  const apiData =   {
+  "name": values?.contactName,
+  "email": values?.emailAddress,
+  "phone": values?.phoneNumber,
+  "salary": values?.Salary,
+  "nric": values?.nricFin,
+  "bank_acc": values?.bankaccno,
+  "bank_code": values?.bankCode,
+  "designation": values?.designation,
+  "company": {
+    "company_name": values?.companyName,
+    "uen": values?.uen,
+    "reg_address": values?.address,
+    "business_sector": values?.sector,
+    "employee_count": values?.employeesCount
+  },
+  "project": {
+    "title": values?.projectTitle,
+    "desc":values?.projectDescription,
+    "timeline": values?.projectTimeline,
+    "total_cost": values?.totalProjectCost,
+    "funding_amount": values?.requestedFundingAmount
+  }
+}
+
+
+
+
+
+
+
   };
 
 
@@ -107,9 +138,9 @@ const navigate = useNavigate();
       validationSchema={validationSchemas[activeTab]}
       onSubmit={(values)  =>  handleSubmit(values)}
     >
-      {({ validateForm,values }) => (
+      {({ validateForm, resetForm,values,handleSubmit }) => (
         <Form>
-
+          {/* Tabs */}
          
             <div className="flex gap-55 border-b pb-2 mb-6 bg-blue-100 w-full h-[60px] items-center">
         {tabs.map((tab) => (
@@ -136,12 +167,13 @@ const navigate = useNavigate();
         ))}
       </div>
 
+          {/* Render the current step */}
           {activeTab === "Company" && <CompanyForm />}
           {activeTab === "Contact" && <ContactForm />}
           {activeTab === "Project" && <ProjectForm />}
           {activeTab === "Funding" && <FundingForm />}
 
-  
+          {/* Navigation */}
           <div className="flex justify-end mt-6 gap-3">
                   <Button
               variant="outline"
