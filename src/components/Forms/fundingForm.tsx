@@ -1,56 +1,57 @@
-import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+
+import { Field, ErrorMessage } from "formik";
 import { BsInfoCircleFill } from "react-icons/bs";
 
-const FundingForm = () => {
-  const validationSchema = Yup.object().shape({
-    // projectTitle: Yup.string().required("Company Name is required"),
-   // projectDescription: Yup.string().required("UEN is required"),
-    projectTimeline: Yup.string().required("Project Timeline is required"),
-    totalProjectCost: Yup.string().required("Total Project Cost is required"),
-
-  });
-
-  const handleSubmit = (values: any) => {
-    console.log("Company Form Data:", values);
-  };
+export default function FundingForm() {
+  
 
   return (
-    <Formik
-      initialValues={{
-        projectTitle: "",
-        projectDescription: "",
-        projectTimeline: "",
-        totalProjectCost: "",
+    <div className="grid gap-4">
 
-      }}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      {() => (
-        <Form className="grid gap-4">
-          <div>
-           <label className="font-medium text-gray-400 flex items-center gap-1">
-  Requested Funding Amount <BsInfoCircleFill className="text-gray-400" />
-</label>
-            <Field
-              name="projectTitle"
-       className="bg-gray-100 rounded-md w-full p-2 mt-1"
+      <div>
+        <label className="font-medium text-gray-700 flex items-center gap-1">
+          Requested Funding Amount <BsInfoCircleFill className="text-gray-400" />
+        </label>
+        <Field name="requestedFundingAmount">
+        {({ field, form }: any) => (
+          <input
+            {...field}
+            type="number"
+            className="bg-gray-100 rounded-md w-full p-2 mt-1"
+            onChange={(e) =>
+              form.setFieldValue("requestedFundingAmount", Number(e.target.value))
+            }
+          />
+        )}
+      </Field>
+        <ErrorMessage
+          name="requestedFundingAmount"
+          component="div"
+          className="text-red-500 text-sm"
+        />
+      </div>
 
-            />
-            <ErrorMessage
-              name="projectTitle"
-              component="div"
-              className="text-red-500 text-sm"
-            />
-          </div>
+
+      <div>
+        <label className="font-medium text-gray-700 flex items-center gap-1">
+          Funding Purpose <BsInfoCircleFill className="text-gray-400" />
+        </label>
+        <Field
+          name="fundingPurpose"
+          as="textarea"
+          className="bg-gray-100 rounded-md w-full p-2 mt-1"
+          placeholder="Enter funding purpose"
+          rows={3}
+        />
+        <ErrorMessage
+          name="fundingPurpose"
+          component="div"
+          className="text-red-500 text-sm"
+        />
+      </div>
 
       
-        </Form>
-      )}
-    </Formik>
-  );
-};
 
-export default FundingForm;
+    </div>
+  );
+}
