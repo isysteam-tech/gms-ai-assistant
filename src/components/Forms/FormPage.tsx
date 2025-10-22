@@ -10,6 +10,9 @@ import { useNavigate } from "react-router-dom";
 import icons from "../../assets/Icon.svg";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import chatgpt from "../../assets/Chat.svg";
+import { FaRegShareSquare } from "react-icons/fa";
+import { PiDotsThreeVertical, PiLinkSimple } from "react-icons/pi";
 
 const FormPage = () => {
   const [activeTab, setActiveTab] = useState("Company");
@@ -42,29 +45,25 @@ const FormPage = () => {
             onButtonClick={() => navigate("/chatwindow")}
           />
         </div>
-        <div className="bg-white rounded-2xl p-8 shadow-md">
-          <h1 className="text-2xl font-semibold mb-4">Application Form</h1>
-          <p className="text-gray-600 mb-6">
-            Pre-filled with data from your conversation. Complete any missing
-            fields.
-          </p>
+        <div className="bg-white rounded-2xl p-4 shadow-md">
+          <div className="flex justify-between space-x-95 px-2 py-1 border-b border-b-gray-300">
+            <div className="flex space-x-1">
+              <img src={chatgpt} />
+              <div className="flex flex-col space-x-2 px-2 gap-1">
+                <p>Application Form</p>
+                <p className="text-gray-400 rounded-lg text-sm px-1.5 py-1 me-2 mb-2 ">
+                  Pre-filled data from our conversation, Compelete any missing
+                  fields.
+                </p>
+              </div>{" "}
+            </div>
 
-          {/* Tabs */}
-          {/* <div className="flex gap-70 border-b pb-2 mb-6 bg-blue-100 w-full h-15">
-      {tabs.map((tab) => (
-        <button
-          key={tab}
-          onClick={() => setActiveTab(tab)}
-          className={`pb-2 text-sm font-medium ${
-            activeTab === tab
-              ? "border-b-2 border-blue-500 text-blue-600"
-              : "text-gray-500 hover:text-gray-700"
-          }`}
-    >
-      {tab}
-    </button>
-  ))}
-</div> */}
+            <div className="flex gap-2 px-2 py-1 pt-6">
+              <FaRegShareSquare size={18} />
+              <PiLinkSimple size={20} />
+              <PiDotsThreeVertical size={20} />
+            </div>
+          </div>
 
           <div className="flex gap-55 border-b pb-2 mb-6 bg-blue-100 w-full h-[60px] items-center ">
             {tabs.map((tab) => (
