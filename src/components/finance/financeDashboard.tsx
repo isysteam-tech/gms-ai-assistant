@@ -11,9 +11,9 @@ const FinanceDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-30 p-6">
-      <div>
+      {/* <div>
         <MainHeader/>
-      </div>
+      </div> */}
       {/* Header Card */}
       <div className="bg-white rounded-2xl shadow-lg p-8 mb-6 border border-purple-100">
         <div className="flex items-center gap-4 mb-2">
@@ -77,7 +77,7 @@ const FinanceDashboard: React.FC = () => {
       </div>
 
       {/* Quick Stats */}
-      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-purple-100 hover:shadow-xl transition-shadow duration-300">
           <div className="flex items-center justify-between">
             <div>
@@ -113,7 +113,7 @@ const FinanceDashboard: React.FC = () => {
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };
