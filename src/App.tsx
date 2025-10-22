@@ -52,7 +52,8 @@ const App: React.FC = () => {
   return (
     <SidebarLayout onLogout={handleLogout}>
       <Routes>
-        <Route path="/dashboard" element={<FinanceDashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/financedashboard" element={<FinanceDashboard />} />
         <Route path="/chatWindow" element={<ChatWindow />} />
         <Route path="/formpage" element={<FormPage />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
