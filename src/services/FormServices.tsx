@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const token = process.env.REACT_APP_VAULT_TOKEN;
+// const token = process.env.REACT_APP_VAULT_TOKEN;
 const http = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL, 
+  // baseURL: process.env.REACT_APP_API_BASE_URL, 
   timeout: 20000, 
   headers: {
     "Content-Type": "application/json",
-    "x-vault-token": token, 
+    // "x-vault-token": token, 
   },
 });
 

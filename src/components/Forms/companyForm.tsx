@@ -2,11 +2,8 @@ import { Field, ErrorMessage, useFormikContext } from "formik";
 import { BsInfoCircleFill } from "react-icons/bs";
 
 export default function CompanyForm() {
-
-
   return (
     <div className="grid gap-4">
-
       <div className="flex gap-4">
         <div className="flex-1">
           <label className="font-medium text-gray-700 flex items-center gap-1">
@@ -43,7 +40,6 @@ export default function CompanyForm() {
         </div>
       </div>
 
-
       <div>
         <label className="font-medium text-gray-700 flex items-center gap-1">
           Registered Address <span className="text-red-500">*</span>
@@ -62,7 +58,6 @@ export default function CompanyForm() {
           className="text-red-500 text-sm"
         />
       </div>
-
 
       <div className="flex gap-4">
         <div className="flex-1">
@@ -87,18 +82,18 @@ export default function CompanyForm() {
             Employee Count <span className="text-red-500">*</span>
             <BsInfoCircleFill className="text-gray-400" />
           </label>
-  <Field name="employeesCount">
-  {({ field, form }: any) => (
-    <input
-      {...field}
-      type="number"
-      className="bg-gray-100 rounded-md w-full p-2 mt-1"
-      onChange={(e) =>
-        form.setFieldValue("employeesCount", Number(e.target.value))
-      }
-    />
-  )}
-</Field>
+          <Field name="employeesCount">
+            {({ field, form }: any) => (
+              <input
+                {...field}
+                type="number"
+                className="bg-gray-100 rounded-md w-full p-2 mt-1"
+                onChange={(e) =>
+                  form.setFieldValue("employeesCount", Number(e.target.value))
+                }
+              />
+            )}
+          </Field>
           <ErrorMessage
             name="employeesCount"
             component="div"
@@ -106,10 +101,6 @@ export default function CompanyForm() {
           />
         </div>
       </div>
-
-
- 
     </div>
   );
 }
-

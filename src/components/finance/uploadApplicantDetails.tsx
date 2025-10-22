@@ -1,14 +1,15 @@
 import React, { useState, useRef } from "react";
-import { AiOutlineCloudUpload, AiOutlineLoading3Quarters, AiOutlineCheckCircle, AiOutlineDownload } from "react-icons/ai";
+import { AiOutlineCloudUpload, AiOutlineLoading3Quarters, AiOutlineCheckCircle } from "react-icons/ai";
 import { HiOutlineDocumentText } from "react-icons/hi";
 import { MdError } from "react-icons/md";
+import axios from "axios";
 
 interface UploadState {
   file: File | null;
   uploading: boolean;
   uploaded: boolean;
   error: string | null;
-  downloadUrl: string | null;
+  recordsProcessed: number;
 }
 
 const UploadApplicantDetails: React.FC = () => {
@@ -17,7 +18,7 @@ const UploadApplicantDetails: React.FC = () => {
     uploading: false,
     uploaded: false,
     error: null,
-    downloadUrl: null,
+    recordsProcessed: 0,
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -33,7 +34,7 @@ const UploadApplicantDetails: React.FC = () => {
           uploading: false,
           uploaded: false,
           error: "Please select a CSV file",
-          downloadUrl: null,
+          recordsProcessed: 0,
         });
         return;
       }
@@ -45,7 +46,7 @@ const UploadApplicantDetails: React.FC = () => {
           uploading: false,
           uploaded: false,
           error: "File size must be less than 10MB",
-          downloadUrl: null,
+          recordsProcessed: 0,
         });
         return;
       }
@@ -55,9 +56,35 @@ const UploadApplicantDetails: React.FC = () => {
         uploading: false,
         uploaded: false,
         error: null,
-        downloadUrl: null,
+        recordsProcessed: 0,
       });
     }
+  };
+
+  const parseCSVForApplicantIds = async (file: File): Promise<string[]> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        try {
+          const text = e.target?.result as string;
+          const lines = text.split('\n').filter(line => line.trim());
+          
+          // Skip header row and extract IDs from first column
+          const ids = lines.slice(1).map(line => {
+            const columns = line.split(',');
+            return columns[0]?.trim();
+          }).filter(id => id);
+          
+          resolve(ids);
+        } catch (error) {
+          reject(new Error('Failed to parse CSV file'));
+        }
+      };
+      
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsText(file);
+    });
   };
 
   const handleUpload = async () => {
@@ -76,52 +103,92 @@ const UploadApplicantDetails: React.FC = () => {
     }));
 
     try {
-      // Create FormData for file upload
-      const formData = new FormData();
-      formData.append('file', uploadState.file);
+      // Parse CSV to extract applicant IDs
+      const applicantIds = await parseCSVForApplicantIds(uploadState.file);
 
-      // Replace with your actual API endpoint
-      const response = await fetch('http://localhost:3000/api/applicants/upload', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error('Upload failed');
+      if (applicantIds.length === 0) {
+        throw new Error('No valid applicant IDs found in CSV');
       }
 
-      const result = await response.json();
+      // Call finance export API - Backend handles everything and returns CSV file
+      const response = await axios.post(
+        'http://localhost:3000/api/applicants/finance-export',
+        {
+          applicant_ids: applicantIds,
+          purpose: true, // true for detokenization
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+          },
+          responseType: 'blob', // Important: Receive file as blob
+        }
+      );
 
-      // Simulate getting download URL from backend
-      // Replace this with actual response data
-      const downloadUrl = result.downloadUrl || URL.createObjectURL(uploadState.file);
+      // Backend returns the CSV file directly
+      // Create download link from blob
+      const blob = new Blob([response.data], { type: 'text/csv' });
+      const downloadUrl = window.URL.createObjectURL(blob);
+      
+      // Extract filename from response headers or use default
+      const contentDisposition = response.headers['content-disposition'];
+      let fileName = `finance_export_${Date.now()}.csv`;
+      
+      if (contentDisposition) {
+        const fileNameMatch = contentDisposition.match(/filename="?(.+)"?/i);
+        if (fileNameMatch && fileNameMatch[1]) {
+          fileName = fileNameMatch[1];
+        }
+      }
 
-      setUploadState(prev => ({
-        ...prev,
-        uploading: false,
-        uploaded: true,
-        downloadUrl,
-      }));
-    } catch (error: any) {
-      setUploadState(prev => ({
-        ...prev,
-        uploading: false,
-        error: error.message || "Upload failed. Please try again.",
-      }));
-    }
-  };
-
-  const handleDownload = () => {
-    if (uploadState.downloadUrl) {
+      // Trigger download
       const link = document.createElement('a');
-      link.href = uploadState.downloadUrl;
-      link.download = `processed_${uploadState.file?.name || 'applicants.csv'}`;
+      link.href = downloadUrl;
+      link.download = fileName;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
+
+      // Update state to show success
+      setUploadState({
+        file: uploadState.file,
+        uploading: false,
+        uploaded: true,
+        error: null,
+        recordsProcessed: applicantIds.length,
+      });
+
+    } catch (error: any) {
+      console.error('Upload error:', error);
+      
+      let errorMessage = "Upload failed. Please try again.";
+      
+      if (error.response) {
+        const status = error.response.status;
+        if (status === 400) {
+          errorMessage = error.response.data?.message || "Invalid applicant IDs";
+        } else if (status === 401) {
+          errorMessage = "Unauthorized. Please login again.";
+        } else if (status === 403) {
+          errorMessage = "Access denied. Finance role required.";
+        } else if (status === 404) {
+          errorMessage = "No applicants found for provided IDs";
+        } else if (status === 500) {
+          errorMessage = "Server error. Please try again later.";
+        }
+      } else if (error.request) {
+        errorMessage = "Cannot connect to server. Please check your connection.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      setUploadState(prev => ({
+        ...prev,
+        uploading: false,
+        error: errorMessage,
+      }));
     }
   };
 
@@ -131,7 +198,7 @@ const UploadApplicantDetails: React.FC = () => {
       uploading: false,
       uploaded: false,
       error: null,
-      downloadUrl: null,
+      recordsProcessed: 0,
     });
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -147,6 +214,21 @@ const UploadApplicantDetails: React.FC = () => {
       {/* Upload Area */}
       {!uploadState.uploaded ? (
         <div className="w-full max-w-2xl">
+          {/* Info Banner */}
+          <div className="mb-6 p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl border border-purple-200">
+            <div className="flex items-start gap-3">
+              <HiOutlineDocumentText className="w-6 h-6 text-purple-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-semibold text-gray-800 mb-1">How it works</h4>
+                <p className="text-sm text-gray-600">
+                  Upload a CSV file containing Applicant IDs in the first column. 
+                  The system will match these IDs with database records and automatically 
+                  download a complete finance export CSV file.
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Drag & Drop Area */}
           <div
             onClick={triggerFileInput}
@@ -159,10 +241,13 @@ const UploadApplicantDetails: React.FC = () => {
               
               <div>
                 <p className="text-lg font-semibold text-gray-700 mb-2">
-                  {uploadState.file ? uploadState.file.name : "Click to upload or drag and drop"}
+                  {uploadState.file ? uploadState.file.name : "Click to upload CSV with Applicant IDs"}
                 </p>
                 <p className="text-sm text-gray-500">
                   CSV files only (Max 10MB)
+                </p>
+                <p className="text-xs text-gray-400 mt-2">
+                  First column should contain Applicant IDs
                 </p>
               </div>
 
@@ -190,7 +275,7 @@ const UploadApplicantDetails: React.FC = () => {
 
           {/* Error Message */}
           {uploadState.error && (
-            <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg animate-shake">
+            <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
               <p className="text-sm text-red-600 flex items-center gap-2">
                 <MdError className="w-5 h-5 flex-shrink-0" />
                 <span>{uploadState.error}</span>
@@ -208,12 +293,12 @@ const UploadApplicantDetails: React.FC = () => {
               {uploadState.uploading ? (
                 <>
                   <AiOutlineLoading3Quarters className="animate-spin w-5 h-5" />
-                  Uploading...
+                  Processing & Downloading...
                 </>
               ) : (
                 <>
                   <AiOutlineCloudUpload className="w-5 h-5" />
-                  Upload File
+                  Upload & Download
                 </>
               )}
             </button>
@@ -230,7 +315,7 @@ const UploadApplicantDetails: React.FC = () => {
           </div>
         </div>
       ) : (
-        // Success State with Download
+        // Success State
         <div className="w-full max-w-2xl">
           <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl p-8 text-center">
             <div className="flex flex-col items-center gap-4">
@@ -240,51 +325,40 @@ const UploadApplicantDetails: React.FC = () => {
               
               <div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">
-                  Upload Successful!
+                  Download Complete!
                 </h3>
                 <p className="text-gray-600 mb-1">
-                  Your file has been processed successfully
+                  Finance export has been downloaded successfully
                 </p>
                 <p className="text-sm text-gray-500">
-                  {uploadState.file?.name}
+                  {uploadState.recordsProcessed} applicant record(s) processed
                 </p>
               </div>
 
-              {/* Download Button */}
-              <button
-                onClick={handleDownload}
-                className="mt-4 flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold px-8 py-3 rounded-xl transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-              >
-                <AiOutlineDownload className="w-5 h-5" />
-                Download Processed File
-              </button>
-
-              {/* Upload Another */}
+              {/* Process Another */}
               <button
                 onClick={handleReset}
-                className="mt-2 text-purple-600 hover:text-purple-700 font-medium text-sm"
+                className="mt-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold px-8 py-3 rounded-xl transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
-                Upload Another File
+                Process Another File
               </button>
             </div>
           </div>
 
-          {/* File Details Card */}
+          {/* Export Details Card */}
           <div className="mt-6 bg-white border border-gray-200 rounded-xl p-6">
-            <h4 className="font-semibold text-gray-700 mb-4">Upload Details</h4>
+            <h4 className="font-semibold text-gray-700 mb-4">Export Summary</h4>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-500">File Name:</span>
+                <span className="text-gray-500">Uploaded File:</span>
                 <span className="font-medium text-gray-800">{uploadState.file?.name}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">File Size:</span>
-                <span className="font-medium text-gray-800">
-                  {uploadState.file ? (uploadState.file.size / 1024).toFixed(2) : '0'} KB
-                </span>
+                <span className="text-gray-500">Records Processed:</span>
+                <span className="font-medium text-gray-800">{uploadState.recordsProcessed}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Upload Time:</span>
+                <span className="text-gray-500">Export Time:</span>
                 <span className="font-medium text-gray-800">
                   {new Date().toLocaleString()}
                 </span>
@@ -293,9 +367,31 @@ const UploadApplicantDetails: React.FC = () => {
                 <span className="text-gray-500">Status:</span>
                 <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
                   <AiOutlineCheckCircle className="w-4 h-4" />
-                  Completed
+                  Downloaded
                 </span>
               </div>
+            </div>
+          </div>
+
+          {/* Export Includes Info */}
+          <div className="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-xl">
+            <p className="text-sm text-gray-700 mb-2 font-medium">
+              Downloaded CSV includes:
+            </p>
+            <div className="grid grid-cols-2 gap-2 text-xs text-gray-600">
+              <div>• SI No.</div>
+              <div>• Applicant ID</div>
+              <div>• Name</div>
+              <div>• Phone & Email</div>
+              <div>• Salary Band</div>
+              <div>• NRIC</div>
+              <div>• Bank Account</div>
+              <div>• Bank Code</div>
+              <div>• Company Name</div>
+              <div>• Project Title</div>
+              <div>• Timeline</div>
+              <div>• Total Cost</div>
+              <div>• Funding Amount</div>
             </div>
           </div>
         </div>

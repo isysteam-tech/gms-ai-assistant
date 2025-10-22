@@ -8,6 +8,8 @@ import LoginPage from "./components/loginPage";
 import FinanceDashboard from "./components/finance/financeDashboard";
 import { useEffect, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -50,6 +52,7 @@ const App: React.FC = () => {
 
   // If token exists, show authenticated routes
   return (
+    <>
     <SidebarLayout onLogout={handleLogout}>
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
@@ -59,6 +62,8 @@ const App: React.FC = () => {
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </SidebarLayout>
+    <ToastContainer position="top-right" autoClose={3000} />
+    </>
   );
 };
 
