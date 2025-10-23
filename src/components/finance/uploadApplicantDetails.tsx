@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
-import { AiOutlineCloudUpload, AiOutlineLoading3Quarters, AiOutlineCheckCircle } from "react-icons/ai";
+import { AiOutlineCloudUpload, AiOutlineLoading3Quarters, AiOutlineCheckCircle, AiOutlineDownload } from "react-icons/ai";
 import { HiOutlineDocumentText } from "react-icons/hi";
 import { MdError } from "react-icons/md";
+import { BsToggleOff, BsToggleOn } from "react-icons/bs";
 import axios from "axios";
 
 interface UploadState {
@@ -21,19 +22,23 @@ const UploadApplicantDetails: React.FC = () => {
     recordsProcessed: 0,
   });
 
+  const [detokenize, setDetokenize] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     
     if (file) {
-      // Validate file type
-      if (!file.name.endsWith('.csv')) {
+      // Validate file type - Accept both CSV and Excel
+      const validExtensions = ['.csv', '.xlsx', '.xls'];
+      const isValidFile = validExtensions.some(ext => file.name.toLowerCase().endsWith(ext));
+      
+      if (!isValidFile) {
         setUploadState({
           file: null,
           uploading: false,
           uploaded: false,
-          error: "Please select a CSV file",
+          error: "Please select a CSV or Excel file",
           recordsProcessed: 0,
         });
         return;
@@ -61,32 +66,6 @@ const UploadApplicantDetails: React.FC = () => {
     }
   };
 
-  const parseCSVForApplicantIds = async (file: File): Promise<string[]> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      
-      reader.onload = (e) => {
-        try {
-          const text = e.target?.result as string;
-          const lines = text.split('\n').filter(line => line.trim());
-          
-          // Skip header row and extract IDs from first column
-          const ids = lines.slice(1).map(line => {
-            const columns = line.split(',');
-            return columns[0]?.trim();
-          }).filter(id => id);
-          
-          resolve(ids);
-        } catch (error) {
-          reject(new Error('Failed to parse CSV file'));
-        }
-      };
-      
-      reader.onerror = () => reject(new Error('Failed to read file'));
-      reader.readAsText(file);
-    });
-  };
-
   const handleUpload = async () => {
     if (!uploadState.file) {
       setUploadState(prev => ({
@@ -103,46 +82,39 @@ const UploadApplicantDetails: React.FC = () => {
     }));
 
     try {
-      // Parse CSV to extract applicant IDs
-      const applicantIds = await parseCSVForApplicantIds(uploadState.file);
+      // Create FormData to send file
+      const formData = new FormData();
+      formData.append('file', uploadState.file);
 
-      if (applicantIds.length === 0) {
-        throw new Error('No valid applicant IDs found in CSV');
-      }
-
-      // Call finance export API - Backend handles everything and returns CSV file
+      // Call finance export API with file upload
       const response = await axios.post(
-        'http://localhost:3000/api/applicants/finance-export',
-        {
-          applicant_ids: applicantIds,
-          purpose: true, // true for detokenization
-        },
+        `http://localhost:3000/gms-core/applicants/finance-export?purpose=${detokenize}`,
+        formData,
         {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
           },
-          responseType: 'blob', // Important: Receive file as blob
+          responseType: 'blob', // Important for file download
         }
       );
 
-      // Backend returns the CSV file directly
-      // Create download link from blob
-      const blob = new Blob([response.data], { type: 'text/csv' });
-      const downloadUrl = window.URL.createObjectURL(blob);
-      
-      // Extract filename from response headers or use default
+      // Extract filename from Content-Disposition header if available
       const contentDisposition = response.headers['content-disposition'];
-      let fileName = `finance_export_${Date.now()}.csv`;
+      let fileName = `finance_export_${detokenize ? 'detokenized' : 'tokenized'}_${Date.now()}.csv`;
       
       if (contentDisposition) {
-        const fileNameMatch = contentDisposition.match(/filename="?(.+)"?/i);
+        const fileNameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
         if (fileNameMatch && fileNameMatch[1]) {
-          fileName = fileNameMatch[1];
+          fileName = fileNameMatch[1].replace(/['"]/g, '');
         }
       }
 
-      // Trigger download
+      // Create blob URL for download
+      const blob = new Blob([response.data], { type: 'text/csv' });
+      const downloadUrl = window.URL.createObjectURL(blob);
+
+      // Auto-download the file
       const link = document.createElement('a');
       link.href = downloadUrl;
       link.download = fileName;
@@ -157,7 +129,7 @@ const UploadApplicantDetails: React.FC = () => {
         uploading: false,
         uploaded: true,
         error: null,
-        recordsProcessed: applicantIds.length,
+        recordsProcessed: 0, // Backend doesn't return count in this flow
       });
 
     } catch (error: any) {
@@ -167,8 +139,21 @@ const UploadApplicantDetails: React.FC = () => {
       
       if (error.response) {
         const status = error.response.status;
-        if (status === 400) {
-          errorMessage = error.response.data?.message || "Invalid applicant IDs";
+        const responseData = error.response.data;
+        
+        // Handle blob error response
+        if (responseData instanceof Blob) {
+          try {
+            const text = await responseData.text();
+            const jsonError = JSON.parse(text);
+            errorMessage = jsonError.message || errorMessage;
+          } catch (e) {
+            errorMessage = "Server error occurred";
+          }
+        } else if (responseData?.message) {
+          errorMessage = responseData.message;
+        } else if (status === 400) {
+          errorMessage = "Invalid file format or missing applicant IDs";
         } else if (status === 401) {
           errorMessage = "Unauthorized. Please login again.";
         } else if (status === 403) {
@@ -188,6 +173,44 @@ const UploadApplicantDetails: React.FC = () => {
         ...prev,
         uploading: false,
         error: errorMessage,
+      }));
+    }
+  };
+
+  const handleDownloadAgain = async () => {
+    if (!uploadState.file) return;
+
+    try {
+      const formData = new FormData();
+      formData.append('file', uploadState.file);
+
+      const response = await axios.post(
+        `http://localhost:3000/api/applicants/finance-export?purpose=${detokenize}`,
+        formData,
+        {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'multipart/form-data',
+          },
+          responseType: 'blob',
+        }
+      );
+
+      const blob = new Blob([response.data], { type: 'text/csv' });
+      const downloadUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = `finance_export_${detokenize ? 'detokenized' : 'tokenized'}_${Date.now()}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
+    } catch (error) {
+      console.error('Download error:', error);
+      setUploadState(prev => ({
+        ...prev,
+        error: "Download failed. Please try again.",
       }));
     }
   };
@@ -214,16 +237,40 @@ const UploadApplicantDetails: React.FC = () => {
       {/* Upload Area */}
       {!uploadState.uploaded ? (
         <div className="w-full max-w-2xl">
-          {/* Info Banner */}
+          {/* Detokenization Toggle */}
           <div className="mb-6 p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl border border-purple-200">
-            <div className="flex items-start gap-3">
-              <HiOutlineDocumentText className="w-6 h-6 text-purple-600 flex-shrink-0 mt-0.5" />
+            <div className="flex items-center justify-between">
               <div>
-                <h4 className="font-semibold text-gray-800 mb-1">How it works</h4>
+                <h4 className="font-semibold text-gray-800 mb-1">Detokenization</h4>
                 <p className="text-sm text-gray-600">
-                  Upload a CSV file containing Applicant IDs in the first column. 
-                  The system will match these IDs with database records and automatically 
-                  download a complete finance export CSV file.
+                  {detokenize 
+                    ? "Export will include decrypted NRIC, Bank Account, and Bank Code" 
+                    : "Export will include tokenized (encrypted) data"}
+                </p>
+              </div>
+              <button
+                onClick={() => setDetokenize(!detokenize)}
+                className="flex items-center gap-2 transition-colors duration-200"
+                aria-label={`Toggle detokenization ${detokenize ? 'off' : 'on'}`}
+              >
+                {detokenize ? (
+                  <BsToggleOn className="w-12 h-12 text-purple-600" />
+                ) : (
+                  <BsToggleOff className="w-12 h-12 text-gray-400" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Info Banner */}
+          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+            <div className="flex items-start gap-3">
+              <HiOutlineDocumentText className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-semibold text-gray-800 mb-1">File Requirements</h4>
+                <p className="text-sm text-gray-600">
+                  Upload a CSV or Excel file with a column named <strong>"Applicants Ids"</strong> containing applicant IDs. 
+                  The system will process the file and generate a finance export.
                 </p>
               </div>
             </div>
@@ -241,13 +288,13 @@ const UploadApplicantDetails: React.FC = () => {
               
               <div>
                 <p className="text-lg font-semibold text-gray-700 mb-2">
-                  {uploadState.file ? uploadState.file.name : "Click to upload CSV with Applicant IDs"}
+                  {uploadState.file ? uploadState.file.name : "Click to upload CSV or Excel file"}
                 </p>
                 <p className="text-sm text-gray-500">
-                  CSV files only (Max 10MB)
+                  CSV, XLSX, or XLS files (Max 10MB)
                 </p>
                 <p className="text-xs text-gray-400 mt-2">
-                  First column should contain Applicant IDs
+                  Must contain "Applicants Ids" column
                 </p>
               </div>
 
@@ -266,7 +313,7 @@ const UploadApplicantDetails: React.FC = () => {
               <input
                 ref={fileInputRef}
                 type="file"
-                accept=".csv"
+                accept=".csv,.xlsx,.xls"
                 onChange={handleFileSelect}
                 className="hidden"
               />
@@ -298,7 +345,7 @@ const UploadApplicantDetails: React.FC = () => {
               ) : (
                 <>
                   <AiOutlineCloudUpload className="w-5 h-5" />
-                  Upload & Download
+                  Upload & Export
                 </>
               )}
             </button>
@@ -315,7 +362,7 @@ const UploadApplicantDetails: React.FC = () => {
           </div>
         </div>
       ) : (
-        // Success State
+        // Success State with Download
         <div className="w-full max-w-2xl">
           <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl p-8 text-center">
             <div className="flex flex-col items-center gap-4">
@@ -325,20 +372,29 @@ const UploadApplicantDetails: React.FC = () => {
               
               <div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">
-                  Download Complete!
+                  Export Complete!
                 </h3>
                 <p className="text-gray-600 mb-1">
-                  Finance export has been downloaded successfully
+                  Finance export file has been downloaded successfully
                 </p>
                 <p className="text-sm text-gray-500">
-                  {uploadState.recordsProcessed} applicant record(s) processed
+                  Check your downloads folder
                 </p>
               </div>
 
-              {/* Process Another */}
+              {/* Download Button */}
+              <button
+                onClick={handleDownloadAgain}
+                className="mt-4 flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold px-8 py-3 rounded-xl transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              >
+                <AiOutlineDownload className="w-5 h-5" />
+                Download Again
+              </button>
+
+              {/* Upload Another */}
               <button
                 onClick={handleReset}
-                className="mt-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold px-8 py-3 rounded-xl transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                className="mt-2 text-purple-600 hover:text-purple-700 font-medium text-sm"
               >
                 Process Another File
               </button>
@@ -347,15 +403,23 @@ const UploadApplicantDetails: React.FC = () => {
 
           {/* Export Details Card */}
           <div className="mt-6 bg-white border border-gray-200 rounded-xl p-6">
-            <h4 className="font-semibold text-gray-700 mb-4">Export Summary</h4>
+            <h4 className="font-semibold text-gray-700 mb-4">Export Details</h4>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-500">Uploaded File:</span>
+                <span className="text-gray-500">Source File:</span>
                 <span className="font-medium text-gray-800">{uploadState.file?.name}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Records Processed:</span>
-                <span className="font-medium text-gray-800">{uploadState.recordsProcessed}</span>
+                <span className="text-gray-500">File Size:</span>
+                <span className="font-medium text-gray-800">
+                  {uploadState.file ? (uploadState.file.size / 1024).toFixed(2) : '0'} KB
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Detokenization:</span>
+                <span className={`font-medium ${detokenize ? 'text-green-600' : 'text-gray-600'}`}>
+                  {detokenize ? 'Enabled' : 'Disabled'}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">Export Time:</span>
@@ -376,22 +440,23 @@ const UploadApplicantDetails: React.FC = () => {
           {/* Export Includes Info */}
           <div className="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-xl">
             <p className="text-sm text-gray-700 mb-2 font-medium">
-              Downloaded CSV includes:
+              Exported CSV includes:
             </p>
             <div className="grid grid-cols-2 gap-2 text-xs text-gray-600">
               <div>• SI No.</div>
-              <div>• Applicant ID</div>
+              <div>• ID</div>
               <div>• Name</div>
-              <div>• Phone & Email</div>
+              <div>• Phone</div>
+              <div>• Email</div>
               <div>• Salary Band</div>
-              <div>• NRIC</div>
-              <div>• Bank Account</div>
-              <div>• Bank Code</div>
               <div>• Company Name</div>
-              <div>• Project Title</div>
+              <div>• Title</div>
               <div>• Timeline</div>
               <div>• Total Cost</div>
               <div>• Funding Amount</div>
+              <div>• NRIC</div>
+              <div>• Bank Account</div>
+              <div>• Bank Code</div>
             </div>
           </div>
         </div>
