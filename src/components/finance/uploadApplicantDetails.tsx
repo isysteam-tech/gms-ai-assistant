@@ -438,7 +438,7 @@ const UploadApplicantDetails: React.FC = () => {
           </div>
 
           {/* Export Includes Info */}
-          <div className="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-xl">
+          {/* <div className="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-xl">
             <p className="text-sm text-gray-700 mb-2 font-medium">
               Exported CSV includes:
             </p>
@@ -458,7 +458,7 @@ const UploadApplicantDetails: React.FC = () => {
               <div>• Bank Account</div>
               <div>• Bank Code</div>
             </div>
-          </div>
+          </div> */}
         </div>
       )}
     </div>

@@ -242,7 +242,6 @@
 
 // export default SidebarLayout;
 
-
 // sideNavbar.tsx
 import React, { useState, type ReactNode } from "react";
 import { BsGear } from "react-icons/bs";
@@ -257,6 +256,7 @@ import saved from "../assets/saved.svg";
 import company from "../assets/company.svg";
 import history from "../assets/clock-04.svg";
 import { useNavigate } from "react-router-dom";
+import home from "../assets/icons8-home.svg"
 
 interface SidebarLayoutProps {
   children: ReactNode;
@@ -266,13 +266,14 @@ interface SidebarLayoutProps {
 const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children, onLogout }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [appOpen, setAppOpen] = useState(false);
-  const [active, setActive] = useState("Chat With Assistant");
+  const [active, setActive] = useState("Home");
   const navigate = useNavigate();
 
   const navItems = [
+    { icon: home, label: "Home", path: "/financedashboard" },
     { icon: chatgpt, label: "Chat With Assistant", path: "/dashboard" },
-    { icon: application, label: "My Applications", path:"/" },
-    { icon: claims, label: "Claims", path: "/", },
+    { icon: application, label: "My Applications", path:"/applications" },
+    { icon: claims, label: "Claims", path: "/claims", },
     { icon: saved, label: "Saved Allowances", path: "/saved" },
     { icon: company, label: "Company Profile", path: "/company" },
     { icon: history, label: "History", tag: "Beta", path: "/history" },

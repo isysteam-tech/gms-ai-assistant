@@ -135,7 +135,7 @@ export default function FormPage() {
                       if (Object.keys(errors).length === 0) {
                         setActiveTab(tab);
                       } else {
-                        alert("Please Fill Required  Fields !");
+                        toast("Please Fill Required  Fields !");
                       }
                     }}
                     className={`text-sm font-medium transition-all duration-200 flex items-center justify-center ${
@@ -174,7 +174,7 @@ export default function FormPage() {
                     if (activeTab === "Funding") {
                       const errors = await validateForm();
                       if (Object.keys(errors).length > 0) {
-                        alert(
+                        toast(
                           "Please fill in all required fields before submitting!"
                         );
                         return;

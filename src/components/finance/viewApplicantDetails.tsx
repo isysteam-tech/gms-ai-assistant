@@ -61,7 +61,7 @@ const ViewApplicantDetails: React.FC = () => {
         const token = localStorage.getItem("token"); 
 
         const response = await fetch(
-          "localhost:3000/gms-core/applicants/?limit=10&skip=0",
+          "http://localhost:3000/gms-core/applicants/?limit=10&skip=0",
           {
             method: "GET",
             headers: {
@@ -75,19 +75,17 @@ const ViewApplicantDetails: React.FC = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await response.json();
+        const result = await response.json();
 
-        const formattedApplicant: Applicant = {
-          applicantId: data.name || "N/A",
-          nric: data.nric || "N/A",
-          accountNo: data.bank_acc || "N/A",
-          bankCode: data.bank_code || "N/A",
-          salaryBand: data.salary
-            ? getSalaryBandFromSalary(data.salary)
-            : "N/A",
-        };
+        const formattedApplicants = result.data.map((item: any) => ({
+        applicantId: item.id || "N/A",
+        nric: item.identity?.nric_token || "N/A",
+        accountNo: item.identity?.bank_acc_token || "N/A",
+        bankCode: item.identity?.bank_code_token  || "N/A",
+        salaryBand: item.salaryBand || "N/A",
+      }));
 
-        setApplicants([formattedApplicant]);
+        setApplicants(formattedApplicants);
       } catch (err: any) {
         setError(err.message || "Something went wrong");
       } finally {
@@ -98,12 +96,12 @@ const ViewApplicantDetails: React.FC = () => {
     fetchApplicants();
   }, []);
 
-  const getSalaryBandFromSalary = (salary: number): string => {
-    if (salary >= 9000) return "A";
-    if (salary >= 5000) return "B";
-    if (salary >= 2000) return "C";
-    return "D";
-  };
+  // const getSalaryBandFromSalary = (salary: number): string => {
+  //   if (salary >= 9000) return "A";
+  //   if (salary >= 5000) return "B";
+  //   if (salary >= 2000) return "C";
+  //   return "D";
+  // };
 
   const getSalaryBandColor = (band: string) => {
     switch (band) {
@@ -113,6 +111,8 @@ const ViewApplicantDetails: React.FC = () => {
         return "bg-blue-100 text-blue-700 border-blue-200";
       case "C":
         return "bg-purple-100 text-purple-700 border-purple-200";
+        case "D":
+        return "bg-sky-100 text-sky-700 border-sky-200";
       default:
         return "bg-gray-100 text-gray-700 border-gray-200";
     }
