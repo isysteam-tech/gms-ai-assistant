@@ -61,7 +61,7 @@ const ViewApplicantDetails: React.FC = () => {
         const token = localStorage.getItem("token"); 
 
         const response = await fetch(
-          "http://localhost:3000/gms-core/applicants/644ad9b3-31e3-45e7-8b52-3fab6905ac13",
+          "localhost:3000/gms-core/applicants/?limit=10&skip=0",
           {
             method: "GET",
             headers: {
