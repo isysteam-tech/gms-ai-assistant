@@ -5,6 +5,7 @@ import { BiDollarCircle } from "react-icons/bi";
 import { AiOutlineEye, AiOutlineUpload, AiOutlineCheckCircle } from "react-icons/ai";
 import { HiOutlineUsers, HiOutlineClock } from "react-icons/hi";
 import MainHeader from "../MainHeader";
+import AuditLogSection from "./auditLogSection";
 
 const FinanceDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"view" | "upload">("view");
@@ -77,7 +78,7 @@ const FinanceDashboard: React.FC = () => {
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-purple-100 hover:shadow-xl transition-shadow duration-300">
           <div className="flex items-center justify-between">
             <div>
@@ -113,7 +114,9 @@ const FinanceDashboard: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
+
+      <AuditLogSection/>
     </div>
   );
 };
