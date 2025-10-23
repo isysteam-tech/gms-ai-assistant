@@ -18,40 +18,6 @@ const ViewApplicantDetails: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // useEffect(() => {
-  //   const fetchApplicants = async () => {
-  //     setLoading(true);
-  //     setError(null);
-  //     try {
-
-  //       const response = await fetch(
-  //         "http://localhost:3000/gms-core/applicants/644ad9b3-31e3-45e7-8b52-3fab6905ac13"
-  //       );
-
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! status: ${response.status}`);
-  //       }
-
-  //       const data = await response.json();
-  //       // Convert API data to match table structure
-  //       const formattedApplicant: Applicant = {
-  //         applicantId: data.name || "N/A",
-  //         nric: data.nric || "N/A",
-  //         accountNo: data.bank_acc || "N/A",
-  //         bankCode: data.bank_code || "N/A",
-  //         salaryBand: data.salary ? getSalaryBandFromSalary(data.salary) : "N/A",
-  //       };
-  //       setApplicants([formattedApplicant]);
-  //     } catch (err: any) {
-  //       setError(err.message || "Something went wrong");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchApplicants();
-  // }, []);
-
   useEffect(() => {
     const fetchApplicants = async () => {
       setLoading(true);
