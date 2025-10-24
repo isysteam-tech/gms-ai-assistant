@@ -13,6 +13,8 @@ const LoginPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const role = localStorage.getItem("role");
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -44,7 +46,9 @@ const LoginPage: React.FC = () => {
       localStorage.setItem("role", data.role);
 
       // Redirect to dashboard
-      window.location.href = "/financedashboard";
+      // window.location.href = (role === "admin") ? "/financedashboard" : "/dashboard";
+      window.location.href = role === "admin" ? "/financedashboard" : "/dashboard";
+
     } catch (err: any) {
       // err is already formatted by handleError() in service
       setError(err.message || "An unexpected error occurred");
@@ -65,8 +69,14 @@ const LoginPage: React.FC = () => {
       {/* Background blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-        <div className="absolute top-40 right-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" style={{ animationDelay: "2s" }}></div>
-        <div className="absolute -bottom-8 left-1/2 w-72 h-72 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" style={{ animationDelay: "4s" }}></div>
+        <div
+          className="absolute top-40 right-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"
+          style={{ animationDelay: "2s" }}
+        ></div>
+        <div
+          className="absolute -bottom-8 left-1/2 w-72 h-72 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"
+          style={{ animationDelay: "4s" }}
+        ></div>
       </div>
 
       <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
@@ -75,7 +85,9 @@ const LoginPage: React.FC = () => {
           <div className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-2xl shadow-lg mb-4">
             <MdLightbulb className="w-12 h-12 text-purple-600" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">GMS AI Assistant</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">
+            GMS AI Assistant
+          </h1>
           <p className="text-purple-100 text-sm">
             Get Smart Recommendations For Your Grant Application
           </p>

@@ -285,6 +285,12 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children, onLogout }) => 
     }
   };
 
+  const role = localStorage.getItem("role");
+
+  const filteredNavItems = navItems.filter(
+  (item) => !(role === "operations" && item.label === "Home")
+);
+
   return (
     <div className="flex h-screen bg-primary">
       {/* ===== Sidebar ===== */}
@@ -310,9 +316,10 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children, onLogout }) => 
             </button>
           </div>
 
+
           {/* --- Navigation --- */}
           <nav aria-label="Main Navigation" className="space-y-2 text-gray-700 ">
-            {navItems.map((item) => (
+            {filteredNavItems.map((item) => (
               <div key={item.label}>
                 {/* My Applications Dropdown */}
                 {item.label === "My Applications" ? (
