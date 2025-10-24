@@ -26,6 +26,7 @@ const App: React.FC = () => {
     localStorage.removeItem("token");
     setToken(null);
     window.location.href = "/";
+    location.reload();
   };
 
   // Show loading state while checking authentication
