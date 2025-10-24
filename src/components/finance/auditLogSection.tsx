@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { HiOutlineUser } from "react-icons/hi";
 import moment from "moment";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
 interface AuditLog {
   id: string;
@@ -16,7 +17,7 @@ const AuditLogSection: React.FC = () => {
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 5; 
+  const rowsPerPage = 10;
 
   useEffect(() => {
     const fetchAuditLogs = async () => {
@@ -44,6 +45,7 @@ const AuditLogSection: React.FC = () => {
           role: item.request_ctx?.role || "N/A",
           source: item.request_ctx?.source || "N/A",
           action: item.action,
+          resource: item.resource,
           purpose: item.purpose,
           createdAt: moment(item.createdAt).format("DD MMM YYYY, hh:mm A"),
         }));
@@ -122,31 +124,25 @@ const AuditLogSection: React.FC = () => {
             </table>
 
             {/* Pagination Controls */}
-            <div className="flex justify-center mt-4 gap-2">
+            <div className="flex justify-end pr-4 mt-4 gap-2 items-center">
               <button
                 className="px-3 py-1 border rounded disabled:opacity-50"
                 onClick={() => setCurrentPage((prev) => prev - 1)}
                 disabled={currentPage === 1}
               >
-                Prev
+                <FaAngleLeft />
               </button>
-              {[...Array(totalPages)].map((_, idx) => (
-                <button
-                  key={idx}
-                  className={`px-3 py-1 border rounded ${
-                    currentPage === idx + 1 ? "bg-purple-500 text-white" : ""
-                  }`}
-                  onClick={() => setCurrentPage(idx + 1)}
-                >
-                  {idx + 1}
-                </button>
-              ))}
+
+              <span className="px-3 py-1">
+                Page {currentPage} of {totalPages}
+              </span>
+
               <button
                 className="px-3 py-1 border rounded disabled:opacity-50"
                 onClick={() => setCurrentPage((prev) => prev + 1)}
                 disabled={currentPage === totalPages}
               >
-                Next
+                <FaAngleRight />
               </button>
             </div>
           </>

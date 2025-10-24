@@ -6,6 +6,7 @@ import { MdOutlineAccountBalance } from "react-icons/md";
 
 interface Applicant {
   applicantId: string;
+  name: string;
   nric: string;
   accountNo: string;
   bankCode: string;
@@ -44,6 +45,7 @@ const ViewApplicantDetails: React.FC = () => {
         const result = await response.json();
 
         const formattedApplicants = result.data.map((item: any) => ({
+        name: item.name || "N/A",
         applicantId: item.id || "N/A",
         nric: item.identity?.nric_token || "N/A",
         accountNo: item.identity?.bank_acc_token || "N/A",
@@ -143,6 +145,12 @@ const ViewApplicantDetails: React.FC = () => {
                     </th>
                     <th className="py-4 px-6 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                       <div className="flex items-center gap-2">
+                        <HiOutlineUser className="w-4 h-4" />
+                        Name
+                      </div>
+                    </th>
+                    <th className="py-4 px-6 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      <div className="flex items-center gap-2">
                         <HiOutlineDocumentText className="w-4 h-4" />
                         NRIC
                       </div>
@@ -176,6 +184,9 @@ const ViewApplicantDetails: React.FC = () => {
                       >
                         <td className="py-4 px-6 text-sm font-medium text-gray-900">
                           {applicant.applicantId}
+                        </td>
+                        <td className="py-4 px-6 text-sm font-medium text-gray-900">
+                          {applicant.name}
                         </td>
                         <td className="py-4 px-6 text-sm text-gray-700">
                           {applicant.nric}

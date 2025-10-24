@@ -5,7 +5,7 @@ import ChatInput from "./chatInput";
 import chatGpt from "../../assets/chat-gpt.svg";
 import { FaRegShareSquare } from "react-icons/fa";
 import { PiDotsThreeVertical, PiLinkSimple } from "react-icons/pi";
-import { FiChevronDown } from "react-icons/fi";
+import { FiChevronDown, FiUpload } from "react-icons/fi";
 import { BsStars } from "react-icons/bs";
 import { SiOpenai, SiGooglegemini, SiAnthropic } from "react-icons/si";
 import ApplicationProgress from "../ApplicationBar/ApplicationProgress";
@@ -13,6 +13,7 @@ import MainHeader from "../MainHeader";
 import flash from "../../assets/flash.svg";
 import { useNavigate } from "react-router-dom";
 import QuickActions from "./quickActions";
+import { toast } from "react-toastify";
 
 interface Message {
   text: string;
@@ -80,8 +81,7 @@ const ChatWindow: React.FC = () => {
 
   // API BASE URL (adjust if needed)
   const API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL ||
-    "http://localhost:3000/gms-core/ai"; // your backend URL
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/gms-core/ai"; // your backend URL
 
   // Handle sending message and calling backend
   const handleSend = async (text: string) => {
@@ -116,8 +116,7 @@ const ChatWindow: React.FC = () => {
       setMessages((prev) => [
         ...prev,
         {
-          text:
-            "⚠️ Sorry, I couldn't reach the AI service. Please try again later.",
+          text: "⚠️ Sorry, I couldn't reach the AI service. Please try again later.",
           isUser: false,
           timestamp: new Date().toLocaleTimeString(),
         },
@@ -132,6 +131,49 @@ const ChatWindow: React.FC = () => {
   const handleModelChange = (modelId: AIModel) => {
     setSelectedModel(modelId);
     setIsDropdownOpen(false);
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      toast.loading("Uploading file...");
+
+      const response = await axios.post(
+        "http://localhost:3000/gms-core/pdf/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      toast.dismiss();
+      toast.success(`✅ File uploaded successfully: ${file.name}`);
+
+      console.log("Upload response:", response.data);
+
+      // Optionally: show message in chat
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: `📎 File uploaded: ${file.name}`,
+          isUser: true,
+          timestamp: new Date().toLocaleTimeString(),
+        },
+      ]);
+    } catch (error: any) {
+      toast.dismiss();
+      console.error("Upload error:", error);
+      toast.error("❌ File upload failed. Please try again.");
+    } finally {
+      e.target.value = ""; // reset input
+    }
   };
 
   return (
@@ -213,6 +255,24 @@ const ChatWindow: React.FC = () => {
             </div>
 
             <div className="flex gap-4 items-center text-gray-600">
+              <div className="relative">
+                <input
+                  type="file"
+                  id="fileUpload"
+                  className="hidden"
+                  onChange={(e) => handleFileUpload(e)}
+                  accept=".pdf,.docx,.jpg,.jpeg"
+                />
+                <label
+                  htmlFor="fileUpload"
+                  className="cursor-pointer gap-2 hover:text-purple-600 transition-colors duration-200 flex items-center"
+                  title="Upload a file"
+                >
+                  Upload File
+                  <FiUpload size={20} />
+                </label>
+              </div>
+
               <button className="hover:text-purple-600 transition-colors duration-200">
                 <FaRegShareSquare size={18} />
               </button>
