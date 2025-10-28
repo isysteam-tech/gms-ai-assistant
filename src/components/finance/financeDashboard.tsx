@@ -6,6 +6,7 @@ import { AiOutlineEye, AiOutlineUpload, AiOutlineCheckCircle } from "react-icons
 import { HiOutlineUsers, HiOutlineClock } from "react-icons/hi";
 import MainHeader from "../MainHeader";
 import AuditLogSection from "./auditLogSection";
+import UploadButton from "../chatBot/uploadButton";
 
 const FinanceDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"view" | "upload">("view");
@@ -16,7 +17,7 @@ const FinanceDashboard: React.FC = () => {
         <MainHeader/>
       </div> */}
       {/* Header Card */}
-      <div className="bg-white rounded-2xl shadow-lg p-8 mb-6 border border-purple-100">
+      <div className="flex justify-between bg-white rounded-2xl shadow-lg p-8 mb-6 border border-purple-100">
         <div className="flex items-center gap-4 mb-2">
           <div className="w-12 h-12 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl flex items-center justify-center shadow-lg">
             <BiDollarCircle className="w-6 h-6 text-white" />
@@ -29,6 +30,9 @@ const FinanceDashboard: React.FC = () => {
               Manage and review applicant financial details
             </p>
           </div>
+        </div>
+        <div>
+          <UploadButton />
         </div>
       </div>
 

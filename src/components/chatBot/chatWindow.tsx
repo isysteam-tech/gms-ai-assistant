@@ -33,28 +33,29 @@ interface AIModelOption {
 
 const ChatWindow: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
-    {
-      text:
-        "🤖Hello! I'm your AI Assistant <br/> I can help you with: <br/>" +
-        "● 🏢Grant Applications - Apply for funding with government API integration <br/>" +
-        "● 💰Claim Submissions - Submit milestone and reimbursement claims <br/>" +
-        "●❓General Assistance - Answer questions about grants and processes <br/>" +
-        "What would you like to do today? You can simply tell me in your own words!",
-      isUser: false,
-      timestamp: "",
-      quickActions: [
-        "I want to apply for a grant",
-        "I need to submit a claim",
-        "Help me find suitable funding",
-        "I have a question about my application",
-      ],
-    },
+    // {
+    //   text:
+    //     "🤖Hello! I'm your AI Assistant <br/> I can help you with: <br/>" +
+    //     "● 🏢Grant Applications - Apply for funding with government API integration <br/>" +
+    //     "● 💰Claim Submissions - Submit milestone and reimbursement claims <br/>" +
+    //     "●❓General Assistance - Answer questions about grants and processes <br/>" +
+    //     "What would you like to do today? You can simply tell me in your own words!",
+    //   isUser: false,
+    //   timestamp: "",
+    //   quickActions: [
+    //     "I want to apply for a grant",
+    //     "I need to submit a claim",
+    //     "Help me find suitable funding",
+    //     "I have a question about my application",
+    //   ],
+    // },
   ]);
 
   const [selectedModel, setSelectedModel] = useState<AIModel>("chatgpt"); // default to ChatGPT
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const role = localStorage.getItem("role");
 
   const aiModels: AIModelOption[] = [
     {
@@ -255,7 +256,7 @@ const ChatWindow: React.FC = () => {
             </div>
 
             <div className="flex gap-4 items-center text-gray-600">
-              <div className="relative">
+              {/* <div className="relative">
                 <input
                   type="file"
                   id="fileUpload"
@@ -271,7 +272,7 @@ const ChatWindow: React.FC = () => {
                   Upload File
                   <FiUpload size={20} />
                 </label>
-              </div>
+              </div> */}
 
               <button className="hover:text-purple-600 transition-colors duration-200">
                 <FaRegShareSquare size={18} />

@@ -24,10 +24,6 @@ const App: React.FC = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-      localStorage.removeItem("username");
-      localStorage.removeItem("role");
-
     setToken(null);
     window.location.href = "/";
     location.reload();

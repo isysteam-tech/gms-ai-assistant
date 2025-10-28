@@ -13,8 +13,6 @@ const LoginPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const role = localStorage.getItem("role");
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -46,9 +44,12 @@ const LoginPage: React.FC = () => {
       localStorage.setItem("role", data.role);
 
       // Redirect to dashboard
-      // window.location.href = (role === "admin") ? "/financedashboard" : "/dashboard";
-      window.location.href = role === "admin" ? "/financedashboard" : "/dashboard";
-
+      // ✅ CORRECT - Uses role from login response
+      if (data.role === "finance" || data.role === "admin") {
+        window.location.href = "/financedashboard";
+      } else {
+        window.location.href = "/dashboard";
+      }
     } catch (err: any) {
       // err is already formatted by handleError() in service
       setError(err.message || "An unexpected error occurred");
